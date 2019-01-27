@@ -12,14 +12,14 @@ class Set {
     lazy var deck: [Card] = createDeck()
     
     private(set) var cardsPlaying: [Card] = []
-    var selectedCardsIndices: [Card] = []
+    var selectedCardsIndices: [Int] = []
     var selectedCardsFormAMatch: Bool {
         if selectedCardsIndices.count < 3 {
             return false
         }
-        let card0 = selectedCardsIndices[0]
-        let card1 = selectedCardsIndices[1]
-        let card2 = selectedCardsIndices[2]
+        let card0 = cardsPlaying[selectedCardsIndices[0]]
+        let card1 = cardsPlaying[selectedCardsIndices[1]]
+        let card2 = cardsPlaying[selectedCardsIndices[2]]
         
         if (((card0.number == card1.number) && (card0.number == card2.number)) ||
             ((card0.number != card1.number) && (card0.number != card2.number) && (card1.number != card2.number))) {
@@ -66,11 +66,18 @@ class Set {
         if selectedCardsIndices.count == 3 {
             selectedCardsIndices = []
         }
-        selectedCardsIndices.append(cardsPlaying[index])
+        selectedCardsIndices.append(index)
     }
     
     func removeMatchedPlayingCards() {
-        cardsPlaying = cardsPlaying.filter { !selectedCardsIndices.contains($0) }
+        cardsPlaying = cardsPlaying.filter { for index in selectedCardsIndices {
+            if ($0 == cardsPlaying[index]) {
+                return false
+            }
+            }
+            return true
+        }
+        selectedCardsIndices = []
     }
 }
 

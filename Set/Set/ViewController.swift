@@ -25,7 +25,9 @@ class ViewController: UIViewController {
     @IBAction func selectCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender), game.cardsPlaying.indices.contains(cardNumber) {
             game.selectCard(at: cardNumber)
+            match = false
             if game.selectedCardsFormAMatch {
+                match = true
                 game.removeMatchedPlayingCards()
                 game.dealThreeCards()
             }
@@ -51,7 +53,17 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var matchedLabel: UILabel!
+    
+    var match = false
+    
     private func updateViewFromModel() {
+        if match {
+            matchedLabel.text = "✅"
+        }
+        else {
+            matchedLabel.text = ""
+        }
         for index in cardButtons.indices {
             if game.cardsPlaying.indices.contains(index) {
                 let card = game.cardsPlaying[index]
@@ -74,8 +86,13 @@ class ViewController: UIViewController {
                 let attributedString = NSAttributedString(string: text, attributes: attributes)
                 cardButtons[index].setAttributedTitle(attributedString, for: UIControl.State.normal)
                 cardButtons[index].layer.borderWidth = 3.0
-                if game.selectedCardsIndices.contains(card) {
-                    cardButtons[index].layer.borderColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+                if game.selectedCardsIndices.contains(index) {
+                    if game.selectedCardsIndices.count == 3 && !game.selectedCardsFormAMatch {
+                        cardButtons[index].layer.borderColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                    }
+                    else {
+                        cardButtons[index].layer.borderColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+                    }
                 }
                 else {
                     cardButtons[index].layer.borderColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)

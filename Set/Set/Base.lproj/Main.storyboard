@@ -330,11 +330,19 @@
                                     <action selector="dealCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="JIK-Og-xCk"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o9a-w1-7La">
+                                <rect key="frame" x="170" y="693" width="75" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="34"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="matchedLabel" destination="o9a-w1-7La" id="rhm-9X-9UN"/>
                         <outletCollection property="cardButtons" destination="b1G-NI-q9W" collectionClass="NSMutableArray" id="zb2-zU-gaT"/>
                         <outletCollection property="cardButtons" destination="cby-6Y-ehc" collectionClass="NSMutableArray" id="cTV-mT-qOz"/>
                         <outletCollection property="cardButtons" destination="WWN-t2-XSo" collectionClass="NSMutableArray" id="XSs-Wt-nzf"/>
