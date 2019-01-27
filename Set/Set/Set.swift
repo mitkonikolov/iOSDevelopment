@@ -12,7 +12,30 @@ class Set {
     lazy var deck: [Card] = createDeck()
     
     private(set) var cardsPlaying: [Card] = []
-    var selectedCards: [Card] = []
+    var selectedCardsIndices: [Card] = []
+    var selectedCardsFormAMatch: Bool {
+        if selectedCardsIndices.count < 3 {
+            return false
+        }
+        let card0 = selectedCardsIndices[0]
+        let card1 = selectedCardsIndices[1]
+        let card2 = selectedCardsIndices[2]
+        
+        if (((card0.number == card1.number) && (card0.number == card2.number)) ||
+            ((card0.number != card1.number) && (card0.number != card2.number) && (card1.number != card2.number))) {
+            if (((card0.color == card1.color) && (card0.color == card2.color)) ||
+                ((card0.color != card1.color) && (card0.color != card2.color) && (card1.color != card2.color))) {
+                if (((card0.shading == card1.shading) && (card0.shading == card2.shading)) ||
+                    ((card0.shading != card1.shading) && (card0.shading != card2.shading) && (card1.shading != card2.shading))) {
+                    if (((card0.symbol == card1.symbol) && (card0.symbol == card2.symbol)) ||
+                        ((card0.symbol != card1.symbol) && (card0.symbol != card2.symbol) && (card1.symbol != card2.symbol))) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
     
     /// Generates all cards for the deck and returns them as an array.
     private func createDeck() -> [Card] {
@@ -29,17 +52,25 @@ class Set {
         return cards.shuffled()
     }
     
-    func dealThreeCards() -> Bool {
-        if deck.count<3 {
-            return false
-        }
+    func dealThreeCards() {
         var index = 0
         for _ in 0..<3 {
             index = deck.count.arc4random
             let card = deck.remove(at: index)
             cardsPlaying.append(card)
         }
-        return true
+    }
+    
+    func selectCard(at index:Int) {
+        assert(cardsPlaying.indices.contains(index), "Set.selectCard(at: \(index): chosen index not in cardsPlaying")
+        if selectedCardsIndices.count == 3 {
+            selectedCardsIndices = []
+        }
+        selectedCardsIndices.append(cardsPlaying[index])
+    }
+    
+    func removeMatchedPlayingCards() {
+        cardsPlaying = cardsPlaying.filter { !selectedCardsIndices.contains($0) }
     }
 }
 
@@ -51,4 +82,3 @@ extension Int {
         return 0
     }
 }
-
