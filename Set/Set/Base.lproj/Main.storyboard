@@ -40,7 +40,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A16-1E-jUC">
-                                <rect key="frame" x="20" y="841" width="50" height="21"/>
+                                <rect key="frame" x="20" y="834" width="88" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -343,6 +343,7 @@
                     </view>
                     <connections>
                         <outlet property="matchedLabel" destination="o9a-w1-7La" id="rhm-9X-9UN"/>
+                        <outlet property="scoreLabel" destination="A16-1E-jUC" id="LmX-fz-Jgd"/>
                         <outletCollection property="cardButtons" destination="b1G-NI-q9W" collectionClass="NSMutableArray" id="zb2-zU-gaT"/>
                         <outletCollection property="cardButtons" destination="cby-6Y-ehc" collectionClass="NSMutableArray" id="cTV-mT-qOz"/>
                         <outletCollection property="cardButtons" destination="WWN-t2-XSo" collectionClass="NSMutableArray" id="XSs-Wt-nzf"/>

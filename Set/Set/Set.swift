@@ -10,7 +10,7 @@ import Foundation
 
 class Set {
     lazy var deck: [Card] = createDeck()
-    
+    var score = 0
     private(set) var cardsPlaying: [Card] = []
     var selectedCardsIndices: [Int] = []
     var selectedCardsFormAMatch: Bool {
@@ -67,6 +67,14 @@ class Set {
             selectedCardsIndices = []
         }
         selectedCardsIndices.append(index)
+        if selectedCardsIndices.count == 3 {
+            if selectedCardsFormAMatch {
+                score += 3
+            }
+            else {
+                score -= 5
+            }
+        }
     }
     
     func removeMatchedPlayingCards() {
@@ -78,6 +86,11 @@ class Set {
             return true
         }
         selectedCardsIndices = []
+    }
+    
+    func deselectCard(number cardNumber: Int) {
+        selectedCardsIndices = selectedCardsIndices.filter { $0 != cardNumber}
+        score -= 1
     }
 }
 

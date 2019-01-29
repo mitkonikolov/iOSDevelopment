@@ -24,12 +24,19 @@ class ViewController: UIViewController {
     
     @IBAction func selectCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender), game.cardsPlaying.indices.contains(cardNumber) {
-            game.selectCard(at: cardNumber)
-            match = false
             if game.selectedCardsFormAMatch {
-                match = true
-                game.removeMatchedPlayingCards()
-                game.dealThreeCards()
+                if !game.selectedCardsIndices.contains(cardNumber) {
+                    game.removeMatchedPlayingCards()
+                    game.dealThreeCards()
+                    game.selectCard(at: cardNumber)
+                }
+            }
+            else if game.selectedCardsIndices.count < 3 &&
+                game.selectedCardsIndices.contains(cardNumber) {
+                game.deselectCard(number: cardNumber)
+            }
+            else {
+                game.selectCard(at: cardNumber)
             }
             updateViewFromModel()
         }
@@ -47,23 +54,22 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dealCards(_ sender: Any) {
-        if moreCardsCanBeShown, !game.deck.isEmpty {
+        if game.selectedCardsFormAMatch {
+            game.removeMatchedPlayingCards()
             game.dealThreeCards()
-            updateViewFromModel()
         }
+        else if moreCardsCanBeShown, !game.deck.isEmpty {
+            game.dealThreeCards()
+        }
+        updateViewFromModel()
     }
     
     @IBOutlet weak var matchedLabel: UILabel!
     
-    var match = false
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     
     private func updateViewFromModel() {
-        if match {
-            matchedLabel.text = "✅"
-        }
-        else {
-            matchedLabel.text = ""
-        }
         for index in cardButtons.indices {
             if game.cardsPlaying.indices.contains(index) {
                 let card = game.cardsPlaying[index]
@@ -87,7 +93,10 @@ class ViewController: UIViewController {
                 cardButtons[index].setAttributedTitle(attributedString, for: UIControl.State.normal)
                 cardButtons[index].layer.borderWidth = 3.0
                 if game.selectedCardsIndices.contains(index) {
-                    if game.selectedCardsIndices.count == 3 && !game.selectedCardsFormAMatch {
+                    if game.selectedCardsFormAMatch {
+                        cardButtons[index].layer.borderColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+                    }
+                    else if game.selectedCardsIndices.count == 3 && !game.selectedCardsFormAMatch {
                         cardButtons[index].layer.borderColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
                     }
                     else {
@@ -103,5 +112,6 @@ class ViewController: UIViewController {
                 cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.normal)
             }
         }
+        scoreLabel.text = "Score: \(game.score)"
     }
 }
