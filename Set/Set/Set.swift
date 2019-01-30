@@ -10,6 +10,12 @@ import Foundation
 
 class Set {
     lazy var deck: [Card] = createDeck()
+    var randomCard: Card {
+        get {
+            let index = deck.count.arc4random
+            return deck.remove(at: index)
+        }
+    }
     var score = 0
     private(set) var cardsPlaying: [Card] = []
     var selectedCardsIndices: [Int] = []
@@ -53,11 +59,8 @@ class Set {
     }
     
     func dealThreeCards() {
-        var index = 0
         for _ in 0..<3 {
-            index = deck.count.arc4random
-            let card = deck.remove(at: index)
-            cardsPlaying.append(card)
+            cardsPlaying.append(randomCard)
         }
     }
     
@@ -77,13 +80,22 @@ class Set {
         }
     }
     
-    func removeMatchedPlayingCards() {
-        cardsPlaying = cardsPlaying.filter { for index in selectedCardsIndices {
-            if ($0 == cardsPlaying[index]) {
-                return false
+    func replaceMatchedPlayingCardsWithRandomOnes() {
+        if deck.isEmpty {
+            cardsPlaying = cardsPlaying.filter {
+                for index in selectedCardsIndices {
+                    if ($0 == cardsPlaying[index]) {
+                        return false
+                    }
+                }
+                return true
             }
+        }
+        else {
+            for index in selectedCardsIndices {
+                cardsPlaying.remove(at: index)
+                cardsPlaying.insert(randomCard, at: index)
             }
-            return true
         }
         selectedCardsIndices = []
     }

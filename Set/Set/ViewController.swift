@@ -26,8 +26,7 @@ class ViewController: UIViewController {
         if let cardNumber = cardButtons.index(of: sender), game.cardsPlaying.indices.contains(cardNumber) {
             if game.selectedCardsFormAMatch {
                 if !game.selectedCardsIndices.contains(cardNumber) {
-                    game.removeMatchedPlayingCards()
-                    game.dealThreeCards()
+                    game.replaceMatchedPlayingCardsWithRandomOnes()
                     game.selectCard(at: cardNumber)
                 }
             }
@@ -55,8 +54,7 @@ class ViewController: UIViewController {
     
     @IBAction func dealCards(_ sender: Any) {
         if game.selectedCardsFormAMatch {
-            game.removeMatchedPlayingCards()
-            game.dealThreeCards()
+            game.replaceMatchedPlayingCardsWithRandomOnes()
         }
         else if moreCardsCanBeShown, !game.deck.isEmpty {
             game.dealThreeCards()
