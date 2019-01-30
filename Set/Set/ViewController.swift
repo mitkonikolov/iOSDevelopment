@@ -68,7 +68,6 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var scoreLabel: UILabel!
     
-    
     private func updateViewFromModel() {
         for index in cardButtons.indices {
             if game.cardsPlaying.indices.contains(index) {
