@@ -10,10 +10,10 @@ import Foundation
 
 class Set {
     lazy var deck: [Card] = createDeck()
-    var randomCard: Card {
+    var randomCard: Card? {
         get {
             let index = deck.count.arc4random
-            return deck.remove(at: index)
+            return deck.count >= 1 ? deck.remove(at: index) : nil
         }
     }
     var score = 0
@@ -59,8 +59,10 @@ class Set {
     }
     
     func dealThreeCards() {
-        for _ in 0..<3 {
-            cardsPlaying.append(randomCard)
+        if !deck.isEmpty {
+            for _ in 0..<3 {
+                cardsPlaying.append(randomCard!)
+            }
         }
     }
     
@@ -94,7 +96,7 @@ class Set {
         else {
             for index in selectedCardsIndices {
                 cardsPlaying.remove(at: index)
-                cardsPlaying.insert(randomCard, at: index)
+                cardsPlaying.insert(randomCard!, at: index)
             }
         }
         selectedCardsIndices = []
