@@ -14,7 +14,7 @@
 		A4290F3321F675C4003A9275 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4290F3121F675C4003A9275 /* LaunchScreen.storyboard */; };
 		A4290F3C21F6771E003A9275 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F3B21F6771E003A9275 /* Card.swift */; };
 		A4290F4621F69818003A9275 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F4521F69818003A9275 /* Set.swift */; };
-		A4290F4821F9E2CF003A9275 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F4721F9E2CF003A9275 /* Property.swift */; };
+		A42CDE67222B273E00D84B39 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CDE66222B273E00D84B39 /* Property.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 		A4290F3421F675C4003A9275 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4290F3B21F6771E003A9275 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		A4290F4521F69818003A9275 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
-		A4290F4721F9E2CF003A9275 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Property.swift; path = ../../../../../../../../.Trash/Property.swift; sourceTree = "<group>"; };
+		A42CDE66222B273E00D84B39 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,8 +65,8 @@
 				A4290F2C21F675C2003A9275 /* Main.storyboard */,
 				A4290F3421F675C4003A9275 /* Info.plist */,
 				A4290F3B21F6771E003A9275 /* Card.swift */,
-				A4290F4721F9E2CF003A9275 /* Property.swift */,
 				A4290F4521F69818003A9275 /* Set.swift */,
+				A42CDE66222B273E00D84B39 /* Property.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -152,7 +152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4290F4821F9E2CF003A9275 /* Property.swift in Sources */,
+				A42CDE67222B273E00D84B39 /* Property.swift in Sources */,
 				A4290F4621F69818003A9275 /* Set.swift in Sources */,
 				A4290F2B21F675C2003A9275 /* ViewController.swift in Sources */,
 				A4290F3C21F6771E003A9275 /* Card.swift in Sources */,
