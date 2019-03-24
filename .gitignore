@@ -1,0 +1,6 @@
+# Generated build
+build/
+DerivedData/
+
+# User settings
+*/xcuserdata/*
