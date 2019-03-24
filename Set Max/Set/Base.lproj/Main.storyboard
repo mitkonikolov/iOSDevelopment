@@ -59,6 +59,12 @@
                                     <constraint firstAttribute="width" priority="750" constant="800" id="Sov-VK-PBJ"/>
                                     <constraint firstAttribute="width" secondItem="vJ4-0E-OBK" secondAttribute="height" multiplier="5:8" id="rPx-4f-Pl2"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="faceUp" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="numberSymbols">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

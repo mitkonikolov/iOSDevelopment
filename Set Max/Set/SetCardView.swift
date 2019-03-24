@@ -8,14 +8,19 @@
 
 import UIKit
 
+@IBDesignable
 class SetCardView: UIView {
 
     // view properties
-    private var symbol = "▲" { didSet {setNeedsDisplay(); setNeedsLayout()} }
-    private var numberSymbols = 3 { didSet {setNeedsDisplay(); setNeedsLayout()} }
-    private var shading = Shading.full { didSet {setNeedsDisplay(); setNeedsLayout()} }
-    private var color = UIColor.red { didSet {setNeedsDisplay(); setNeedsLayout()} }
-    private var faceUp = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    @IBInspectable
+    private var symbol: String = "▲" { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    @IBInspectable
+    private var numberSymbols: Int = 3 { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    private var shading: Shading = Shading.full { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    @IBInspectable
+    private var color: UIColor = UIColor.red { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    @IBInspectable
+    private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
     // subviews
     private lazy var label = createCardLabel()
