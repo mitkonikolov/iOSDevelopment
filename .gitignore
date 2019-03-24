@@ -4,3 +4,6 @@ DerivedData/
 
 # User settings
 */xcuserdata/*
+
+# Ignore information about the directory
+*.DS_Store*
