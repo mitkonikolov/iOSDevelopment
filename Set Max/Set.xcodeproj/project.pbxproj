@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A42141152247E64A006D8840 /* CardValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42141142247E64A006D8840 /* CardValue.swift */; };
+		A42141152247E64A006D8840 /* CardValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42141142247E64A006D8840 /* CardValueView.swift */; };
 		A4290F2921F675C2003A9275 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F2821F675C2003A9275 /* AppDelegate.swift */; };
 		A4290F2B21F675C2003A9275 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F2A21F675C2003A9275 /* ViewController.swift */; };
 		A4290F2E21F675C2003A9275 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4290F2C21F675C2003A9275 /* Main.storyboard */; };
@@ -16,12 +16,13 @@
 		A4290F3C21F6771E003A9275 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F3B21F6771E003A9275 /* Card.swift */; };
 		A4290F4621F69818003A9275 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F4521F69818003A9275 /* Set.swift */; };
 		A42CDE67222B273E00D84B39 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CDE66222B273E00D84B39 /* Property.swift */; };
+		F61659B32249337100CCAC23 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61659B22249337100CCAC23 /* Shape.swift */; };
 		F6B535E62243CC1A001FEBEB /* Shading.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B535E52243CC1A001FEBEB /* Shading.swift */; };
 		F6E9CA0822427386008A68E8 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E9CA0722427386008A68E8 /* SetCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A42141142247E64A006D8840 /* CardValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardValue.swift; sourceTree = "<group>"; };
+		A42141142247E64A006D8840 /* CardValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardValueView.swift; sourceTree = "<group>"; };
 		A4290F2521F675C2003A9275 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4290F2821F675C2003A9275 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A4290F2A21F675C2003A9275 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -32,6 +33,7 @@
 		A4290F3B21F6771E003A9275 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		A4290F4521F69818003A9275 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		A42CDE66222B273E00D84B39 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
+		F61659B22249337100CCAC23 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		F6B535E52243CC1A001FEBEB /* Shading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shading.swift; sourceTree = "<group>"; };
 		F6E9CA0722427386008A68E8 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,7 +77,8 @@
 				A42CDE66222B273E00D84B39 /* Property.swift */,
 				F6E9CA0722427386008A68E8 /* SetCardView.swift */,
 				F6B535E52243CC1A001FEBEB /* Shading.swift */,
-				A42141142247E64A006D8840 /* CardValue.swift */,
+				A42141142247E64A006D8840 /* CardValueView.swift */,
+				F61659B22249337100CCAC23 /* Shape.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -162,12 +165,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A42CDE67222B273E00D84B39 /* Property.swift in Sources */,
-				A42141152247E64A006D8840 /* CardValue.swift in Sources */,
+				A42141152247E64A006D8840 /* CardValueView.swift in Sources */,
 				F6E9CA0822427386008A68E8 /* SetCardView.swift in Sources */,
 				A4290F4621F69818003A9275 /* Set.swift in Sources */,
 				A4290F2B21F675C2003A9275 /* ViewController.swift in Sources */,
 				A4290F3C21F6771E003A9275 /* Card.swift in Sources */,
 				A4290F2921F675C2003A9275 /* AppDelegate.swift in Sources */,
+				F61659B32249337100CCAC23 /* Shape.swift in Sources */,
 				F6B535E62243CC1A001FEBEB /* Shading.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

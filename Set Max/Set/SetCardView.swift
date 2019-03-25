@@ -23,14 +23,15 @@ class SetCardView: UIView {
     private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
     // subviews
-    private lazy var label = createCardLabel()
+//    private lazy var label = createCardLabel()
     
     private lazy var value = createCardValue()
+
     
-    private func createCardValue() -> UIBezierPath {
-        let path =  UIBezierPath(rect: CGRect(x: bounds.midX, y: bounds.midY, width: 100, height: 100))
-        addSubview(path)
-        return path
+    private func createCardValue() -> UIView {
+        let view = CardValueView()
+        addSubview(view)
+        return view
     }
     
     /// Generates an NSAttributedString with fonts enabling accessibility
@@ -61,28 +62,24 @@ class SetCardView: UIView {
     private func createCardLabel() -> UILabel {
         let label = UILabel()
         label.numberOfLines = 0
-//        addSubview(label)
+        addSubview(label)
         return label
     }
     
     /// Configures the text on the subview label of this view and sets its frame
     /// size and visibility.
-    private func configureLabelTextSize() {
-        label.attributedText = cardValue
-        label.frame.size = CGSize.zero
-        label.sizeToFit()
-        label.isHidden = !faceUp
-        
-    }
+//    private func configureLabelTextSize() {
+//        label.attributedText = cardValue
+//        label.frame.size = CGSize.zero
+//        label.sizeToFit()
+//        label.isHidden = !faceUp
+//
+//    }
     
     // draw subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-//        configureLabelTextSize()
-//
-////        label.textColor = color
-//        label.frame.origin = CGPoint(x: (bounds.midX) - (label.frame.width*0.5), y: (bounds.midY) - label.frame.height*0.5)
+        value.frame.origin = CGPoint(x: (bounds.midX)-100, y: (bounds.midY)-100)
     }
     
     // draw the current view
@@ -91,6 +88,7 @@ class SetCardView: UIView {
         roundedRect.addClip()
         UIColor.lightGray.setFill()
         roundedRect.fill()
+        
         
     }
    
