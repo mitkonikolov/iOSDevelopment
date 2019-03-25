@@ -25,6 +25,14 @@ class SetCardView: UIView {
     // subviews
     private lazy var label = createCardLabel()
     
+    private lazy var value = createCardValue()
+    
+    private func createCardValue() -> UIBezierPath {
+        let path =  UIBezierPath(rect: CGRect(x: bounds.midX, y: bounds.midY, width: 100, height: 100))
+        addSubview(path)
+        return path
+    }
+    
     /// Generates an NSAttributedString with fonts enabling accessibility
     /// properties.
     func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
@@ -32,7 +40,7 @@ class SetCardView: UIView {
         font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .center
-        return NSAttributedString(string: string, attributes: [.font: font, .paragraphStyle: paragraphStyle])
+        return NSAttributedString(string: string, attributes: [.font: font, .paragraphStyle: paragraphStyle, .strokeColor: color])
     }
     
     /// Using the properties of this card view it generates a string that is
@@ -53,7 +61,7 @@ class SetCardView: UIView {
     private func createCardLabel() -> UILabel {
         let label = UILabel()
         label.numberOfLines = 0
-        addSubview(label)
+//        addSubview(label)
         return label
     }
     
@@ -64,13 +72,17 @@ class SetCardView: UIView {
         label.frame.size = CGSize.zero
         label.sizeToFit()
         label.isHidden = !faceUp
+        
     }
     
     // draw subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        configureLabelTextSize()
-        label.frame.origin = CGPoint(x: (bounds.midX) - (label.frame.width*0.5), y: (bounds.midY) - label.frame.height*0.5)
+        
+//        configureLabelTextSize()
+//
+////        label.textColor = color
+//        label.frame.origin = CGPoint(x: (bounds.midX) - (label.frame.width*0.5), y: (bounds.midY) - label.frame.height*0.5)
     }
     
     // draw the current view
@@ -79,6 +91,7 @@ class SetCardView: UIView {
         roundedRect.addClip()
         UIColor.lightGray.setFill()
         roundedRect.fill()
+        
     }
    
     // changes in orientation, font size, etc. are trait changes
