@@ -29,7 +29,7 @@ class SetCardView: UIView {
 
     
     private func createCardValue() -> UIView {
-        let view = CardValueView()
+        let view = CardValueView(frame: CGRect(x: bounds.midX - 100, y: bounds.midY - 100, width: 200, height: 200))
         addSubview(view)
         return view
     }
@@ -56,25 +56,6 @@ class SetCardView: UIView {
         }
         return centeredAttributedString(text, fontSize: 12)
     }
-    
-    /// Creates the subview, sets its number of lines to be dynamic and adds it
-    /// as a subview.
-    private func createCardLabel() -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        addSubview(label)
-        return label
-    }
-    
-    /// Configures the text on the subview label of this view and sets its frame
-    /// size and visibility.
-//    private func configureLabelTextSize() {
-//        label.attributedText = cardValue
-//        label.frame.size = CGSize.zero
-//        label.sizeToFit()
-//        label.isHidden = !faceUp
-//
-//    }
     
     // draw subviews
     override func layoutSubviews() {
