@@ -12,7 +12,7 @@ class CardValueView: UIView {
     private var shape = Shape.circle
     private var shading = Shading.striped
     private var color = UIColor.red
-    private let minBoundToRadiusRatio:CGFloat = 0.5
+    private let boundToRadiusRatio:CGFloat = 0.5
     private var minBound:CGFloat {
         if(bounds.maxX<bounds.maxY) {
             return bounds.maxX
@@ -22,9 +22,13 @@ class CardValueView: UIView {
         }
     }
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, _ shape: Shape, _ shading: Shading, _ color: UIColor) {
         super.init(frame: frame)
         backgroundColor = UIColor.clear
+        
+        self.shape = shape
+        self.shading = shading
+        self.color = color
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +39,7 @@ class CardValueView: UIView {
         var path = UIBezierPath()
         switch shape {
         case .circle:
-            path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: minBound*minBoundToRadiusRatio, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
+            path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: minBound*boundToRadiusRatio, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
         case .square:
             path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: minBound, height: minBound))
         default:

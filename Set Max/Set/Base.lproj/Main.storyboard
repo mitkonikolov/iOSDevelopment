@@ -61,9 +61,6 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="faceUp" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="numberSymbols">
-                                        <integer key="value" value="4"/>
-                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>

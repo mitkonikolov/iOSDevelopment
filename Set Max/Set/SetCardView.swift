@@ -12,8 +12,7 @@ import UIKit
 class SetCardView: UIView {
 
     // view properties
-    @IBInspectable
-    private var symbol: String = "▲" { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    private var shape: Shape = Shape.triangle { didSet {setNeedsDisplay(); setNeedsLayout()} }
     @IBInspectable
     private var numberSymbols: Int = 3 { didSet {setNeedsDisplay(); setNeedsLayout()} }
     private var shading: Shading = Shading.full { didSet {setNeedsDisplay(); setNeedsLayout()} }
@@ -22,45 +21,31 @@ class SetCardView: UIView {
     @IBInspectable
     private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
+    private var subviewSide:CGFloat = 50
+    private var subviewSideSpacingRatio:CGFloat = 1.3
+    
+    
     // subviews
 //    private lazy var label = createCardLabel()
     
-    private lazy var value = createCardValue()
+    private lazy var valuesViews = createCardValueViews()
 
-    
-    private func createCardValue() -> UIView {
-        let view = CardValueView(frame: CGRect(x: bounds.midX - 100, y: bounds.midY - 100, width: 200, height: 200))
-        addSubview(view)
-        return view
-    }
-    
-    /// Generates an NSAttributedString with fonts enabling accessibility
-    /// properties.
-    func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
-        var font = UIFont.preferredFont(forTextStyle: .body).withSize(fontSize)
-        font = UIFontMetrics(forTextStyle: .body).scaledFont(for: font)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        return NSAttributedString(string: string, attributes: [.font: font, .paragraphStyle: paragraphStyle, .strokeColor: color])
-    }
-    
-    /// Using the properties of this card view it generates a string that is
-    /// used to create and return an NSAttributedString.
-    private var cardValue: NSAttributedString {
-        var text = ""
-        for symbolNumber in 0..<numberSymbols {
-            text += symbol
-            if symbolNumber<(numberSymbols-1) {
-                text += "\n"
-            }
+    private func createCardValueViews() -> [UIView] {
+        var valueViews = [UIView]()
+        for _ in 0..<numberSymbols {
+            let view = CardValueView(frame: CGRect(x: bounds.midX - (subviewSide/2), y: bounds.midY - (subviewSide/2), width: subviewSide, height: subviewSide), shape, shading, color)
+            addSubview(view)
+            valueViews.append(view)
         }
-        return centeredAttributedString(text, fontSize: 12)
+        return valueViews
     }
     
     // draw subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        value.frame.origin = CGPoint(x: (bounds.midX)-100, y: (bounds.midY)-100)
+        for viewNumber in 0..<numberSymbols {
+            valuesViews[viewNumber].frame.origin = CGPoint(x: ((bounds.midX)-(subviewSide/2)), y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio) + ((bounds.midY)-(subviewSide/2)))
+        }
     }
     
     // draw the current view
@@ -69,8 +54,6 @@ class SetCardView: UIView {
         roundedRect.addClip()
         UIColor.lightGray.setFill()
         roundedRect.fill()
-        
-        
     }
    
     // changes in orientation, font size, etc. are trait changes
@@ -78,5 +61,4 @@ class SetCardView: UIView {
         setNeedsDisplay()
         setNeedsLayout()
     }
-
 }
