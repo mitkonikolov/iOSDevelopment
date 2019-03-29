@@ -12,49 +12,49 @@ import UIKit
 class SetCardView: UIView {
 
     // view properties
-    private var shape: Shape = Shape.triangle { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    private var shape: Shape = Shape.square { didSet {setNeedsDisplay(); setNeedsLayout()} }
     @IBInspectable
     private var numberSymbols: Int = 3 { didSet {setNeedsDisplay(); setNeedsLayout()} }
-    private var shading: Shading = Shading.full { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    private var shading: Shading = Shading.striped { didSet {setNeedsDisplay(); setNeedsLayout()} }
     @IBInspectable
     private var color: UIColor = UIColor.red { didSet {setNeedsDisplay(); setNeedsLayout()} }
     @IBInspectable
     private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
-    private var subviewSide:CGFloat = 50
+    private var subviewSide:CGFloat {
+        return bounds.maxY * CGFloat(subviewSideToSuperViewMaxYRatio)
+    }
+    
+    private var subviewSideToSuperViewMaxYRatio = 0.15
     private var subviewSideSpacingRatio:CGFloat = 1.3
+    
+    private var firstSubviewYCoordinate: CGFloat {
+        let viewsTotalHeight = CGFloat(numberSymbols) * subviewSide * subviewSideSpacingRatio
+        return ((bounds.maxY - viewsTotalHeight) / 2)
+    }
     
     
     // subviews
 //    private lazy var label = createCardLabel()
     
     private lazy var valuesViews = createCardValueViews()
-    private lazy var viewsContainer = createViewsContainer()
-
-    private func createViewsContainer() -> UIView {
-        return UIView(frame: CGRect(x: bounds.midX, y: bounds.midY, width: subviewSide, height: CGFloat(numberSymbols) * subviewSide * subviewSideSpacingRatio))
-    }
     
     private func createCardValueViews() -> [UIView] {
         var valueViews = [UIView]()
-        for elementNum in 0..<numberSymbols {
+        for _ in 0..<numberSymbols {
             let view = CardValueView(frame: CGRect(x: bounds.midX - (subviewSide/2), y: bounds.midY - (subviewSide/2), width: subviewSide, height: subviewSide), shape, shading, color)
-            viewsContainer.addSubview(view)
-            view.frame.origin = CGPoint(x: 0, y: 0 + (CGFloat(elementNum) * subviewSide * subviewSideSpacingRatio))
-//            addSubview(view)
+            addSubview(view)
             valueViews.append(view)
         }
-        addSubview(viewsContainer)
         return valueViews
     }
     
     // draw subviews
     override func layoutSubviews() {
         super.layoutSubviews()
-        viewsContainer.frame.origin = CGPoint(x: bounds.midX - (subviewSide/2), y: bounds.midY - (viewsContainer.frame.maxY/2))
-//        for viewNumber in 0..<numberSymbols {
-//            valuesViews[viewNumber].frame.origin = CGPoint(x: ((bounds.midX)-(subviewSide/2)), y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio) + ((bounds.midY)-(subviewSide/2)))
-//        }
+        for viewNumber in 0..<numberSymbols {
+            valuesViews[viewNumber].frame.origin = CGPoint(x: ((bounds.midX)-(subviewSide/2)), y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio) + firstSubviewYCoordinate)
+        }
     }
     
     // draw the current view

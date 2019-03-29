@@ -36,7 +36,7 @@ class CardValueView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        var path = UIBezierPath()
+        var path = UIBezierPath(rect: bounds)
         switch shape {
         case .circle:
             path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: minBound*boundToRadiusRatio, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
@@ -63,5 +63,9 @@ class CardValueView: UIView {
             }
             path.stroke()
         }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setNeedsDisplay()
     }
 }
