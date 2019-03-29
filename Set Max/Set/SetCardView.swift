@@ -33,10 +33,6 @@ class SetCardView: UIView {
         return ((bounds.maxY - viewsTotalHeight) / 2)
     }
     
-    
-    // subviews
-//    private lazy var label = createCardLabel()
-    
     private lazy var valuesViews = createCardValueViews()
     
     private func createCardValueViews() -> [UIView] {
@@ -51,6 +47,10 @@ class SetCardView: UIView {
     
     // draw subviews
     override func layoutSubviews() {
+        for valueSubview in valuesViews {
+            valueSubview.removeFromSuperview()
+        }
+        valuesViews = createCardValueViews()
         super.layoutSubviews()
         for viewNumber in 0..<numberSymbols {
             valuesViews[viewNumber].frame.origin = CGPoint(x: ((bounds.midX)-(subviewSide/2)), y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio) + firstSubviewYCoordinate)
