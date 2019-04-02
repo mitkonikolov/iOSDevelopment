@@ -18,6 +18,15 @@ class ViewController: UIViewController {
     private var fill = [-5, 5, 0.35]
     private var colors = [#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
     
+    private let numberOfCards = 65
+    private var grid: Grid {
+        
+        var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: ContainerView.bounds)
+        grid.cellCount = numberOfCards
+        return grid
+    }
+    private let subviewSideBase = 12
+    
     @IBOutlet var cardButtons: [UIButton]!
     
     @IBAction func selectCard(_ sender: UIButton) {
@@ -39,15 +48,29 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    @IBOutlet weak var ContainerView: ContainerView!
+    
     @IBAction func newGame(_ sender: UIButton) {
-        game = Set()
-        for card in cardButtons {
-            card.setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.disabled)
+        for cardNum in 0..<numberOfCards {
+            if let cardPos = grid[cardNum] {
+                let verticalChange = cardPos.height*0.02
+                let horizontalChange = cardPos.width*0.02
+                let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
+                let cardView = SetCardView(frame: newPos, shape: Shape.triangle, numSymbols: 3, shading: Shading.striped, shapeColor: UIColor.green, faceUp: true)
+                ContainerView.addSubview(cardView)
+            }
         }
-        for _ in 0..<4 {
-            game.dealThreeCards()
-        }
-        updateViewFromModel()
+        ContainerView.setNeedsDisplay()
+        ContainerView.setNeedsLayout()
+//        game = Set()
+//        for card in cardButtons {
+//            card.setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.disabled)
+//        }
+//        for _ in 0..<4 {
+//            game.dealThreeCards()
+//        }
+//        updateViewFromModel()
     }
     
     @IBAction func dealCards(_ sender: Any) {

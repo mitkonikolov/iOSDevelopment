@@ -36,7 +36,7 @@ class CardValueView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        var path = UIBezierPath(rect: bounds)
+        var path = UIBezierPath()
         switch shape {
         case .circle:
             path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: minBound*boundToRadiusRatio, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
@@ -57,9 +57,15 @@ class CardValueView: UIView {
             path.fill()
         }
         else if(shading == .striped) {
+            path.lineWidth = 1
+            var stripingStep:CGFloat = 2
+            if path.bounds.width<10 {
+                stripingStep = 1
+            }
+            
             for lineNum in 1..<8 {
-                path.move(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/4), y: 0))
-                path.addLine(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/4), y: bounds.maxY))
+                path.move(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/stripingStep), y: 0))
+                path.addLine(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/stripingStep), y: bounds.maxY))
             }
             path.stroke()
         }

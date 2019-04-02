@@ -21,11 +21,25 @@ class SetCardView: UIView {
     @IBInspectable
     private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
+    public init(frame: CGRect, shape: Shape, numSymbols: Int, shading: Shading, shapeColor: UIColor, faceUp: Bool) {
+        super.init(frame: frame)
+        self.shape = shape
+        self.numberSymbols = numSymbols
+        self.shading = shading
+        self.color = shapeColor
+        self.faceUp = faceUp
+        self.backgroundColor = UIColor.clear
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     private var subviewSide:CGFloat {
         return bounds.maxY * CGFloat(subviewSideToSuperViewMaxYRatio)
     }
     
-    private var subviewSideToSuperViewMaxYRatio = 0.15
+    private var subviewSideToSuperViewMaxYRatio = 0.20
     private var subviewSideSpacingRatio:CGFloat = 1.3
     
     private var firstSubviewYCoordinate: CGFloat {
