@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     private var fill = [-5, 5, 0.35]
     private var colors = [#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
     
-    private let numberOfCards = 65
+    private let numberOfCards = 12
     private var grid: Grid {
         
         var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: ContainerView.bounds)
@@ -49,7 +49,13 @@ class ViewController: UIViewController {
     }
     
     
-    @IBOutlet weak var ContainerView: ContainerView!
+    @IBOutlet weak var ContainerView: ContainerView! {
+        didSet {
+            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(newGame))
+            swipe.direction = .down
+            ContainerView.addGestureRecognizer(swipe)
+        }
+    }
     
     @IBAction func newGame(_ sender: UIButton) {
         for cardNum in 0..<numberOfCards {
