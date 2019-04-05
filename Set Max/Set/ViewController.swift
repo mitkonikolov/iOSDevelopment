@@ -34,23 +34,23 @@ class ViewController: UIViewController {
     
     @IBOutlet var cardButtons: [UIButton]!
     
-    @IBAction func selectCard(_ sender: UIButton) {
-        if let cardNumber = cardButtons.index(of: sender), game.cardsPlaying.indices.contains(cardNumber) {
-            if game.selectedCardsFormAMatch {
-                if !game.selectedCardsIndices.contains(cardNumber) {
-                    game.replaceMatchedPlayingCardsWithRandomOnes()
-                    game.selectCard(at: cardNumber)
-                }
-            }
-            else if game.selectedCardsIndices.count < 3 &&
-                game.selectedCardsIndices.contains(cardNumber) {
-                game.deselectCard(number: cardNumber)
-            }
-            else {
+    @objc private func selectCard(_ tapRecognizer: UITapGestureRecognizer) {
+        let cardNumber = 0
+        if game.selectedCardsFormAMatch {
+            if !game.selectedCardsIndices.contains(cardNumber) {
+                game.replaceMatchedPlayingCardsWithRandomOnes()
                 game.selectCard(at: cardNumber)
             }
-            updateViewFromModel()
         }
+        else if game.selectedCardsIndices.count < 3 &&
+            game.selectedCardsIndices.contains(cardNumber) {
+            game.deselectCard(number: cardNumber)
+        }
+        else {
+            game.selectCard(at: cardNumber)
+        }
+        updateViewFromModel()
+        
     }
     
     
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
                 let verticalChange = cardPos.height*0.02
                 let horizontalChange = cardPos.width*0.02
                 let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
-                let cardView = getCardViewFrom(frame: newPos, card: cardAt[cardNum])
+                let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
                 containerView.addSubview(cardView)
             }
         }
@@ -87,11 +87,18 @@ class ViewController: UIViewController {
     //        updateViewFromModel()
     
     
-    private func getCardViewFrom(frame position: CGRect, card modelCard: Card) -> SetCardView {
+    private func getCardViewFrom(frame position: CGRect, cardNumber: Int) -> SetCardView {
+        let modelCard = cardAt[cardNumber]
         let shape = getShapeFrom(property: modelCard.symbol)
         let shading = getShadingFrom(property: modelCard.shading)
         let color = getColorFrom(property: modelCard.color)
-        return SetCardView(frame: position, shape: shape, numSymbols: modelCard.number.rawValue, shading: shading, shapeColor: color, faceUp: true)
+        // create the card view
+        let setCard =  SetCardView(frame: position, shape: shape, numSymbols: modelCard.number.rawValue, shading: shading, shapeColor: color, faceUp: true)
+        // add the tap recognizer to the view
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCard))
+        tapRecognizer.numberOfTapsRequired = 1
+        setCard.addGestureRecognizer(tapRecognizer)
+        return setCard
     }
     
     @IBAction func dealCards(_ sender: Any) {

@@ -30,6 +30,7 @@ class SetCardView: UIView {
         self.faceUp = faceUp
         self.backgroundColor = UIColor.clear
     }
+    
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
