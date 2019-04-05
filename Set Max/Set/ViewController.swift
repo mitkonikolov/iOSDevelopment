@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         return game.cardsPlaying.count
     }
     private var grid: Grid {
-        var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: ContainerView.bounds)
+        var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: containerView.bounds)
         grid.cellCount = numberOfCards
         return grid
     }
@@ -54,11 +54,11 @@ class ViewController: UIViewController {
     }
     
     
-    @IBOutlet weak var ContainerView: ContainerView! {
+    @IBOutlet weak var containerView: ContainerView! {
         didSet {
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(newGame))
             swipe.direction = .down
-            ContainerView.addGestureRecognizer(swipe)
+            containerView.addGestureRecognizer(swipe)
         }
     }
     
@@ -72,18 +72,26 @@ class ViewController: UIViewController {
                 let verticalChange = cardPos.height*0.02
                 let horizontalChange = cardPos.width*0.02
                 let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
-                let card = cardAt[cardNum]
-                let cardView = SetCardView(frame: newPos, shape: Shape.triangle, numSymbols: card.number.rawValue, shading: Shading.striped, shapeColor: UIColor.green, faceUp: true)
-                ContainerView.addSubview(cardView)
+                let cardView = getCardViewFrom(frame: newPos, card: cardAt[cardNum])
+                containerView.addSubview(cardView)
             }
         }
-        ContainerView.setNeedsDisplay()
-        ContainerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
+        containerView.setNeedsLayout()
         
-//        for card in cardButtons {
-//            card.setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.disabled)
-//        }
-//        updateViewFromModel()
+    }
+    
+    //        for card in cardButtons {
+    //            card.setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.disabled)
+    //        }
+    //        updateViewFromModel()
+    
+    
+    private func getCardViewFrom(frame position: CGRect, card modelCard: Card) -> SetCardView {
+        let shape = getShapeFrom(property: modelCard.symbol)
+        let shading = getShadingFrom(property: modelCard.shading)
+        let color = getColorFrom(property: modelCard.color)
+        return SetCardView(frame: position, shape: shape, numSymbols: modelCard.number.rawValue, shading: shading, shapeColor: color, faceUp: true)
     }
     
     @IBAction func dealCards(_ sender: Any) {
@@ -118,6 +126,35 @@ class ViewController: UIViewController {
             }
         }
         scoreLabel.text = "Score: \(game.score)"
+    }
+    
+    private func getShapeFrom(property shapeAsProperty: Property) -> Shape {
+        if let shapeFromProperty = Shape(rawValue: shapeAsProperty.rawValue) {
+            return shapeFromProperty
+        }
+        // there has been an error in the mapping of raw values - attempting to use default shape
+        // TODO: it would be better to log this somehow
+        return Shape.circle
+    }
+    
+    private func getShadingFrom(property shadingAsProperty: Property) -> Shading {
+        if let shadingFromProperty = Shading(rawValue: shadingAsProperty.rawValue) {
+            return shadingFromProperty
+        }
+        // there has been an error in the mapping of raw values - attempting to use default shape
+        // TODO: it would be better to log this somehow
+        return Shading.full
+    }
+    
+    private func getColorFrom(property colorAsProperty: Property) -> UIColor {
+        switch(colorAsProperty) {
+        case .one:
+            return UIColor.red
+        case .two:
+            return UIColor.green
+        default:
+            return UIColor.blue
+        }
     }
     
     private func getAttributesFor(_ card: Card) -> [NSAttributedString.Key:Any] {

@@ -8,8 +8,8 @@
 
 import Foundation
 
-enum Shading {
-    case full
+enum Shading: Int {
+    case full = 1
     case outlined
     case striped
 }
