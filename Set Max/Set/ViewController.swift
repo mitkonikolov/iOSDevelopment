@@ -18,11 +18,27 @@ class ViewController: UIViewController {
     private var fill = [-5, 5, 0.35]
     private var colors = [#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
     
+    
+    private let rectForCardsHeightRatio:CGFloat = 0.9
+    private var rectForPanelHeightRation:CGFloat {
+        return 1-rectForCardsHeightRatio
+    }
+    
+    private var cardsRect:CGRect  {
+        return CGRect(x: 0, y: 0, width: containerView.bounds.width, height: containerView.bounds.height*rectForCardsHeightRatio)
+    }
+    
+    private var panelRect: CGRect {
+        return CGRect(x: 0, y: containerView.bounds.height*rectForCardsHeightRatio, width: containerView.bounds.width, height: containerView.bounds.height*rectForPanelHeightRation)
+    }
+    
+    private let scoreLabelWidthToPanelRectWidth:CGFloat = 0.35
+    
     private var numberOfCards: Int {
         return game.cardsPlaying.count
     }
     private var grid: Grid {
-        var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: containerView.bounds)
+        var grid = Grid(layout: Grid.Layout.aspectRatio(3/5), frame: cardsRect)
         grid.cellCount = numberOfCards
         return grid
     }
@@ -31,6 +47,8 @@ class ViewController: UIViewController {
     private var cardAt: [Card] {
         return game.cardsPlaying
     }
+    
+    private lazy var scoreLabel = UILabel(frame: CGRect(origin: panelRect.origin, size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
     
     @IBOutlet var cardButtons: [UIButton]!
     
@@ -53,11 +71,8 @@ class ViewController: UIViewController {
                 game.selectCard(at: cardNumber)
                 setUpCardsViewsInContainerView()
             }
-
-
-//            containerView.setNeedsLayout()
-//            containerView.setNeedsDisplay()
         }
+        scoreLabel.text = "Score: \(game.score)"
     }
     
     
@@ -76,14 +91,29 @@ class ViewController: UIViewController {
         }
 
         setUpCardsViewsInContainerView()
+        setUpScoreLabelAndAddToContainerView()
+        containerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
+    }
+    
+    private func setUpScoreLabelAndAddToContainerView() {
+        scoreLabel.textAlignment = NSTextAlignment.center
+        scoreLabel.textColor = UIColor.white
+        scoreLabel.backgroundColor = UIColor.clear
+        scoreLabel.adjustsFontSizeToFitWidth = true
+        scoreLabel.text = "Score: 0"
+        addLabelToContainerViewPanel()
+    }
+    
+    private func addLabelToContainerViewPanel() {
+        containerView.addSubview(scoreLabel)
+        scoreLabel.setNeedsDisplay()
     }
     
     private func updateSelectedCardsViews() {
         for cardNum in game.selectedCardsIndices {
             let currView = containerView.subviews[cardNum] as! SetCardView
             getPlayingCardBorderColor(for: cardNum, withView: currView)
-            
-            
         }
     }
     
@@ -95,13 +125,10 @@ class ViewController: UIViewController {
                 let horizontalChange = cardPos.width*0.02
                 let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
                 let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
-                cardView.setNeedsLayout()
-                cardView.setNeedsDisplay()
                 containerView.addSubview(cardView)
             }
         }
-        containerView.setNeedsLayout()
-        containerView.setNeedsDisplay()
+
     }
     
     private func getCardViewFrom(frame position: CGRect, cardNumber: Int) -> SetCardView {
@@ -130,7 +157,7 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    @IBOutlet weak var scoreLabel: UILabel!
+    
     
     private func updateViewFromModel() {
         for index in cardButtons.indices {
