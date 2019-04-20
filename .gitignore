@@ -2,9 +2,8 @@
 build/
 DerivedData/
 
-# User settings
-*Set.xcodeproj/*
-*/xcuserdata/*
+# XCode Project Directory
+*.xcodeproj/*
 
 # Ignore information about the directory
 *.DS_Store*
