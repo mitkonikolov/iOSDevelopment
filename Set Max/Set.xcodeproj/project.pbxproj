@@ -18,6 +18,7 @@
 		A4290F3C21F6771E003A9275 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F3B21F6771E003A9275 /* Card.swift */; };
 		A4290F4621F69818003A9275 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F4521F69818003A9275 /* Set.swift */; };
 		A42CDE67222B273E00D84B39 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42CDE66222B273E00D84B39 /* Property.swift */; };
+		A46F8BCA226B7DC50032F936 /* CardState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46F8BC9226B7DC50032F936 /* CardState.swift */; };
 		F61659B32249337100CCAC23 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61659B22249337100CCAC23 /* Shape.swift */; };
 		F6B535E62243CC1A001FEBEB /* Shading.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B535E52243CC1A001FEBEB /* Shading.swift */; };
 		F6E9CA0822427386008A68E8 /* SetCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E9CA0722427386008A68E8 /* SetCardView.swift */; };
@@ -37,6 +38,7 @@
 		A4290F3B21F6771E003A9275 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		A4290F4521F69818003A9275 /* Set.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		A42CDE66222B273E00D84B39 /* Property.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Property.swift; sourceTree = "<group>"; };
+		A46F8BC9226B7DC50032F936 /* CardState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardState.swift; sourceTree = "<group>"; };
 		F61659B22249337100CCAC23 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		F6B535E52243CC1A001FEBEB /* Shading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shading.swift; sourceTree = "<group>"; };
 		F6E9CA0722427386008A68E8 /* SetCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCardView.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				A4290F2C21F675C2003A9275 /* Main.storyboard */,
 				A4290F3421F675C4003A9275 /* Info.plist */,
 				A4290F4521F69818003A9275 /* Set.swift */,
+				A46F8BC9226B7DC50032F936 /* CardState.swift */,
 				A4290F3B21F6771E003A9275 /* Card.swift */,
 				A42CDE66222B273E00D84B39 /* Property.swift */,
 				F6B535E52243CC1A001FEBEB /* Shading.swift */,
@@ -187,6 +190,7 @@
 				A4290F3C21F6771E003A9275 /* Card.swift in Sources */,
 				A421411B22540A6E006D8840 /* ContainerView.swift in Sources */,
 				A4290F2921F675C2003A9275 /* AppDelegate.swift in Sources */,
+				A46F8BCA226B7DC50032F936 /* CardState.swift in Sources */,
 				F61659B32249337100CCAC23 /* Shape.swift in Sources */,
 				F6B535E62243CC1A001FEBEB /* Shading.swift in Sources */,
 			);
