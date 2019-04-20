@@ -3,6 +3,7 @@ build/
 DerivedData/
 
 # User settings
+Set.xcodeproj/*
 */xcuserdata/*
 
 # Ignore information about the directory

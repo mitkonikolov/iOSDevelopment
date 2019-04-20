@@ -42,25 +42,22 @@ class ViewController: UIViewController {
                     game.replaceMatchedPlayingCardsWithRandomOnes()
                     game.selectCard(at: cardNumber)
                 }
+                setUpCardsViewsInContainerView()
             }
             else if game.selectedCardsIndices.count < 3 &&
                 game.selectedCardsIndices.contains(cardNumber) {
                 game.deselectCard(number: cardNumber)
+                updateSelectedCardsViews()
             }
             else {
                 game.selectCard(at: cardNumber)
+                setUpCardsViewsInContainerView()
             }
-//            getPlayingCardBorderColor(for: cardNumber, withView: cardView)
-            
 
-            setUpCardsViewsInContainerView()
 
-            containerView.setNeedsLayout()
-            containerView.setNeedsDisplay()
-            
+//            containerView.setNeedsLayout()
+//            containerView.setNeedsDisplay()
         }
-//        containerView.setNeedsLayout()
-//        containerView.setNeedsDisplay()
     }
     
     
@@ -81,13 +78,17 @@ class ViewController: UIViewController {
         setUpCardsViewsInContainerView()
     }
     
-    //        for card in cardButtons {
-    //            card.setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.disabled)
-    //        }
-    //        updateViewFromModel()
+    private func updateSelectedCardsViews() {
+        for cardNum in game.selectedCardsIndices {
+            let currView = containerView.subviews[cardNum] as! SetCardView
+            getPlayingCardBorderColor(for: cardNum, withView: currView)
+            
+            
+        }
+    }
+    
     
     private func setUpCardsViewsInContainerView() {
-
         for cardNum in 0..<numberOfCards {
             if let cardPos = grid[cardNum] {
                 let verticalChange = cardPos.height*0.02
@@ -101,7 +102,6 @@ class ViewController: UIViewController {
         }
         containerView.setNeedsLayout()
         containerView.setNeedsDisplay()
-        
     }
     
     private func getCardViewFrom(frame position: CGRect, cardNumber: Int) -> SetCardView {
