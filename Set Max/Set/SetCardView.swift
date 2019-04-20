@@ -21,6 +21,10 @@ class SetCardView: UIView {
     @IBInspectable
     private var faceUp: Bool = true { didSet {setNeedsDisplay(); setNeedsLayout()} }
     
+
+    
+    public var state = CardState.normal { didSet {setNeedsDisplay(); setNeedsLayout()} }
+    
     public init(frame: CGRect, shape: Shape, numSymbols: Int, shading: Shading, shapeColor: UIColor, faceUp: Bool) {
         super.init(frame: frame)
         self.shape = shape
@@ -28,6 +32,7 @@ class SetCardView: UIView {
         self.shading = shading
         self.color = shapeColor
         self.faceUp = faceUp
+        self.state = CardState.normal
         self.backgroundColor = UIColor.clear
     }
     
@@ -78,6 +83,19 @@ class SetCardView: UIView {
         roundedRect.addClip()
         UIColor.lightGray.setFill()
         roundedRect.fill()
+        
+        UIColor.lightGray.setStroke()
+        roundedRect.lineWidth = 3
+        if state == CardState.highlighted {
+            UIColor.yellow.setStroke()
+        }
+        else if state == CardState.matchSuccessful {
+            UIColor.green.setStroke()
+        }
+        else if state == CardState.matchFailed {
+            UIColor.red.setStroke()
+        }
+        roundedRect.stroke()
     }
    
     // changes in orientation, font size, etc. are trait changes

@@ -34,27 +34,37 @@ class ViewController: UIViewController {
     
     @IBOutlet var cardButtons: [UIButton]!
     
-    @objc private func selectCard(_ tapRecognizer: UITapGestureRecognizer) {
-        let cardNumber = 0
-        if game.selectedCardsFormAMatch {
-            if !game.selectedCardsIndices.contains(cardNumber) {
-                game.replaceMatchedPlayingCardsWithRandomOnes()
+    @objc private func selectCard(_ sender: UITapGestureRecognizer) {
+        if let cardView = sender.view as? SetCardView {
+            let cardNumber = cardView.tag
+            if game.selectedCardsFormAMatch {
+                if !game.selectedCardsIndices.contains(cardNumber) {
+                    game.replaceMatchedPlayingCardsWithRandomOnes()
+                    game.selectCard(at: cardNumber)
+                }
+            }
+            else if game.selectedCardsIndices.count < 3 &&
+                game.selectedCardsIndices.contains(cardNumber) {
+                game.deselectCard(number: cardNumber)
+            }
+            else {
                 game.selectCard(at: cardNumber)
             }
+//            getPlayingCardBorderColor(for: cardNumber, withView: cardView)
+            
+
+            setUpCardsViewsInContainerView()
+
+            containerView.setNeedsLayout()
+            containerView.setNeedsDisplay()
+            
         }
-        else if game.selectedCardsIndices.count < 3 &&
-            game.selectedCardsIndices.contains(cardNumber) {
-            game.deselectCard(number: cardNumber)
-        }
-        else {
-            game.selectCard(at: cardNumber)
-        }
-        updateViewFromModel()
-        
+//        containerView.setNeedsLayout()
+//        containerView.setNeedsDisplay()
     }
     
     
-    @IBOutlet weak var containerView: ContainerView! {
+    @IBOutlet weak var containerView: UIView! {
         didSet {
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(newGame))
             swipe.direction = .down
@@ -67,18 +77,8 @@ class ViewController: UIViewController {
         for _ in 0..<4 {
             game.dealThreeCards()
         }
-        for cardNum in 0..<numberOfCards {
-            if let cardPos = grid[cardNum] {
-                let verticalChange = cardPos.height*0.02
-                let horizontalChange = cardPos.width*0.02
-                let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
-                let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
-                containerView.addSubview(cardView)
-            }
-        }
-        containerView.setNeedsDisplay()
-        containerView.setNeedsLayout()
-        
+
+        setUpCardsViewsInContainerView()
     }
     
     //        for card in cardButtons {
@@ -86,6 +86,23 @@ class ViewController: UIViewController {
     //        }
     //        updateViewFromModel()
     
+    private func setUpCardsViewsInContainerView() {
+
+        for cardNum in 0..<numberOfCards {
+            if let cardPos = grid[cardNum] {
+                let verticalChange = cardPos.height*0.02
+                let horizontalChange = cardPos.width*0.02
+                let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
+                let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
+                cardView.setNeedsLayout()
+                cardView.setNeedsDisplay()
+                containerView.addSubview(cardView)
+            }
+        }
+        containerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
+        
+    }
     
     private func getCardViewFrom(frame position: CGRect, cardNumber: Int) -> SetCardView {
         let modelCard = cardAt[cardNumber]
@@ -94,10 +111,12 @@ class ViewController: UIViewController {
         let color = getColorFrom(property: modelCard.color)
         // create the card view
         let setCard =  SetCardView(frame: position, shape: shape, numSymbols: modelCard.number.rawValue, shading: shading, shapeColor: color, faceUp: true)
+        getPlayingCardBorderColor(for: cardNumber, withView: setCard)
         // add the tap recognizer to the view
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(selectCard))
         tapRecognizer.numberOfTapsRequired = 1
         setCard.addGestureRecognizer(tapRecognizer)
+        setCard.tag = cardNumber
         return setCard
     }
     
@@ -125,7 +144,7 @@ class ViewController: UIViewController {
                 let attributedString = NSAttributedString(string: text, attributes: attributes)
                 cardButtons[index].setAttributedTitle(attributedString, for: UIControl.State.normal)
                 cardButtons[index].layer.borderWidth = 3.0
-                cardButtons[index].layer.borderColor = getPlayingCardBorderColor(for: index)
+//                cardButtons[index].layer.borderColor = getPlayingCardBorderColor(for: index)
             }
             else {
                 cardButtons[index].layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -178,20 +197,20 @@ class ViewController: UIViewController {
         }
     }
     
-    private func getPlayingCardBorderColor(for index:Int) -> CGColor {
+    private func getPlayingCardBorderColor(for index:Int, withView cardView: SetCardView) {
         if game.selectedCardsIndices.contains(index) {
             if game.selectedCardsFormAMatch {
-                return #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+                cardView.state = CardState.matchSuccessful
             }
             else if game.selectedCardsIndices.count == 3 && !game.selectedCardsFormAMatch {
-                return #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+                cardView.state = CardState.matchFailed
             }
             else {
-                return #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+                cardView.state = CardState.highlighted
             }
         }
         else {
-            return #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1)
+            cardView.state = CardState.normal
         }
     }
 }
