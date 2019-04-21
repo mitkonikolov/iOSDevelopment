@@ -50,6 +50,8 @@ class ViewController: UIViewController {
     
     private lazy var scoreLabel = UILabel(frame: CGRect(origin: panelRect.origin, size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
     
+    private lazy var dealThreeCardsButton = UIButton(frame: CGRect(origin: CGPoint(x: panelRect.origin.x+scoreLabel.bounds.width, y: panelRect.origin.y), size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
+    
     @IBOutlet var cardButtons: [UIButton]!
     
     @objc private func selectCard(_ sender: UITapGestureRecognizer) {
@@ -75,6 +77,13 @@ class ViewController: UIViewController {
         scoreLabel.text = "Score: \(game.score)"
     }
     
+    @objc private func dealThreeCards(_ sender: UITapGestureRecognizer) {
+        game.dealThreeCards()
+        setUpCardsViewsInContainerView()
+        containerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
+    }
+    
     
     @IBOutlet weak var containerView: UIView! {
         didSet {
@@ -92,6 +101,7 @@ class ViewController: UIViewController {
 
         setUpCardsViewsInContainerView()
         setUpScoreLabelAndAddToContainerView()
+        setUpDealCardsButtonAndAddToContainerView()
         containerView.setNeedsLayout()
         containerView.setNeedsDisplay()
     }
@@ -103,6 +113,14 @@ class ViewController: UIViewController {
         scoreLabel.adjustsFontSizeToFitWidth = true
         scoreLabel.text = "Score: 0"
         addLabelToContainerViewPanel()
+    }
+    
+    private func setUpDealCardsButtonAndAddToContainerView() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dealThreeCards))
+        dealThreeCardsButton.setTitle("Deal 3 Cards", for: .normal)
+        dealThreeCardsButton.addGestureRecognizer(tap)
+        containerView.addSubview(dealThreeCardsButton)
+        dealThreeCardsButton.setNeedsDisplay()
     }
     
     private func addLabelToContainerViewPanel() {
@@ -117,8 +135,18 @@ class ViewController: UIViewController {
         }
     }
     
+    private func removeCurrentCardSubviewsFromContainerView() {
+        // there are subviews that need to be removed to add the new ones
+        for currCardView in containerView.subviews {
+            if currCardView is SetCardView {
+                currCardView.removeFromSuperview()
+            }
+        }
+    }
     
     private func setUpCardsViewsInContainerView() {
+        removeCurrentCardSubviewsFromContainerView()
+        
         for cardNum in 0..<numberOfCards {
             if let cardPos = grid[cardNum] {
                 let verticalChange = cardPos.height*0.02
