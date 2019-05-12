@@ -10,17 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
     private var game = Set()
-    private let maxNumberCards = 24
-    private var moreCardsCanBeShown: Bool {
-        return game.cardsPlaying.count < maxNumberCards
-    }
     private var shapes = ["▲","●","■"]
     private var fill = [-5, 5, 0.35]
     private var colors = [#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1), #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)]
     
     
     private let rectForCardsHeightRatio:CGFloat = 0.9
-    private var rectForPanelHeightRation:CGFloat {
+    private var rectForPanelHeightRatio:CGFloat {
         return 1-rectForCardsHeightRatio
     }
     
@@ -29,7 +25,7 @@ class ViewController: UIViewController {
     }
     
     private var panelRect: CGRect {
-        return CGRect(x: 0, y: containerView.bounds.height*rectForCardsHeightRatio, width: containerView.bounds.width, height: containerView.bounds.height*rectForPanelHeightRation)
+        return CGRect(x: 0, y: containerView.bounds.height*rectForCardsHeightRatio, width: containerView.bounds.width, height: containerView.bounds.height*rectForPanelHeightRatio)
     }
     
     private let scoreLabelWidthToPanelRectWidth:CGFloat = 0.35
@@ -42,15 +38,39 @@ class ViewController: UIViewController {
         grid.cellCount = numberOfCards
         return grid
     }
-    private let subviewSideBase = 12
     
     private var cardAt: [Card] {
         return game.cardsPlaying
     }
     
-    private lazy var scoreLabel = UILabel(frame: CGRect(origin: panelRect.origin, size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
+    private var scoreLabel:UILabel {
+        let scoreLab = UILabel(frame: CGRect(origin: panelRect.origin, size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
+        scoreLab.textAlignment = NSTextAlignment.center
+        scoreLab.textColor = UIColor.white
+        scoreLab.backgroundColor = UIColor.clear
+        scoreLab.adjustsFontSizeToFitWidth = true
+        scoreLab.contentMode = .redraw
+        scoreLab.text = "Score: \(game.score)"
+        return scoreLab
+    }
     
-    private lazy var dealThreeCardsButton = UIButton(frame: CGRect(origin: CGPoint(x: panelRect.origin.x+scoreLabel.bounds.width, y: panelRect.origin.y), size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
+    private var dealThreeCardsButton:UIButton {
+        let dealCards = UIButton(frame: CGRect(origin: CGPoint(x: panelRect.origin.x+scoreLabel.bounds.width, y: panelRect.origin.y), size: CGSize(width: panelRect.width*scoreLabelWidthToPanelRectWidth, height: panelRect.height)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dealThreeCards))
+        dealCards.setTitle("Deal 3 Cards", for: .normal)
+        dealCards.addGestureRecognizer(tap)
+        dealCards.contentMode = .redraw
+        return dealCards
+    }
+    
+    private var newGameButton:UIButton {
+        let button = UIButton(frame: CGRect(origin: CGPoint(x: dealThreeCardsButton.frame.origin.x+dealThreeCardsButton.bounds.width, y: panelRect.origin.y), size: CGSize(width: panelRect.width*(1-(2*scoreLabelWidthToPanelRectWidth)), height: panelRect.height)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(newGame))
+        button.setTitle("New Game", for: .normal)
+        button.addGestureRecognizer(tap)
+        button.contentMode = .redraw
+        return button
+    }
     
     @IBOutlet var cardButtons: [UIButton]!
     
@@ -75,6 +95,8 @@ class ViewController: UIViewController {
             }
         }
         scoreLabel.text = "Score: \(game.score)"
+        containerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
     }
     
     @objc private func dealThreeCards(_ sender: UITapGestureRecognizer) {
@@ -93,39 +115,26 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func newGame(_ sender: UIButton) {
+    @objc private func newGame(_ sender: UIButton) {
         game = Set()
         for _ in 0..<4 {
             game.dealThreeCards()
         }
 
         setUpCardsViewsInContainerView()
-        setUpScoreLabelAndAddToContainerView()
-        setUpDealCardsButtonAndAddToContainerView()
+        setUpPanelViewsInContainerView()
         containerView.setNeedsLayout()
         containerView.setNeedsDisplay()
     }
     
-    private func setUpScoreLabelAndAddToContainerView() {
-        scoreLabel.textAlignment = NSTextAlignment.center
-        scoreLabel.textColor = UIColor.white
-        scoreLabel.backgroundColor = UIColor.clear
-        scoreLabel.adjustsFontSizeToFitWidth = true
-        scoreLabel.text = "Score: 0"
-        addLabelToContainerViewPanel()
+    private func setUpNewGameButtonAndAddToContainerView() {
+        containerView.addSubview(newGameButton)
+        newGameButton.setNeedsDisplay()
     }
     
     private func setUpDealCardsButtonAndAddToContainerView() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dealThreeCards))
-        dealThreeCardsButton.setTitle("Deal 3 Cards", for: .normal)
-        dealThreeCardsButton.addGestureRecognizer(tap)
         containerView.addSubview(dealThreeCardsButton)
         dealThreeCardsButton.setNeedsDisplay()
-    }
-    
-    private func addLabelToContainerViewPanel() {
-        containerView.addSubview(scoreLabel)
-        scoreLabel.setNeedsDisplay()
     }
     
     private func updateSelectedCardsViews() {
@@ -144,6 +153,22 @@ class ViewController: UIViewController {
         }
     }
     
+    private func removePanelViewsSubviewsFromContainerView() {
+        // there are subviews that need to be removed to add the new ones
+        for currCardView in containerView.subviews {
+            if !(currCardView is SetCardView) {
+                currCardView.removeFromSuperview()
+            }
+        }
+    }
+    
+    private func setUpPanelViewsInContainerView() {
+        removePanelViewsSubviewsFromContainerView()
+        containerView.addSubview(scoreLabel)
+        containerView.addSubview(dealThreeCardsButton)
+        containerView.addSubview(newGameButton)
+    }
+    
     private func setUpCardsViewsInContainerView() {
         removeCurrentCardSubviewsFromContainerView()
         
@@ -153,6 +178,7 @@ class ViewController: UIViewController {
                 let horizontalChange = cardPos.width*0.02
                 let newPos = cardPos.inset(by: UIEdgeInsets.init(top: verticalChange, left: horizontalChange, bottom: verticalChange, right: horizontalChange))
                 let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
+                cardView.contentMode = .redraw
                 containerView.addSubview(cardView)
             }
         }
@@ -175,39 +201,6 @@ class ViewController: UIViewController {
         return setCard
     }
     
-    @IBAction func dealCards(_ sender: Any) {
-        if game.selectedCardsFormAMatch {
-            game.replaceMatchedPlayingCardsWithRandomOnes()
-        }
-        else if moreCardsCanBeShown, !game.deck.isEmpty {
-            game.dealThreeCards()
-        }
-        updateViewFromModel()
-    }
-    
-    
-    
-    private func updateViewFromModel() {
-        for index in cardButtons.indices {
-            if game.cardsPlaying.indices.contains(index) {
-                let card = game.cardsPlaying[index]
-                let attributes = getAttributesFor(card)
-                var text = ""
-                for _ in 0..<card.number.rawValue {
-                    text += shapes[card.symbol.rawValue-1]
-                }
-                let attributedString = NSAttributedString(string: text, attributes: attributes)
-                cardButtons[index].setAttributedTitle(attributedString, for: UIControl.State.normal)
-                cardButtons[index].layer.borderWidth = 3.0
-//                cardButtons[index].layer.borderColor = getPlayingCardBorderColor(for: index)
-            }
-            else {
-                cardButtons[index].layer.borderColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-                cardButtons[index].setAttributedTitle(NSAttributedString(string: ""), for: UIControl.State.normal)
-            }
-        }
-        scoreLabel.text = "Score: \(game.score)"
-    }
     
     private func getShapeFrom(property shapeAsProperty: Property) -> Shape {
         if let shapeFromProperty = Shape(rawValue: shapeAsProperty.rawValue) {
@@ -238,20 +231,6 @@ class ViewController: UIViewController {
         }
     }
     
-    private func getAttributesFor(_ card: Card) -> [NSAttributedString.Key:Any] {
-        if card.shading.rawValue < 3 {
-            return [
-                .foregroundColor: colors[card.color.rawValue-1],
-                .strokeWidth: fill[card.shading.rawValue-1]
-            ]
-        }
-        else {
-            return [
-                .foregroundColor: colors[card.color.rawValue-1].withAlphaComponent(CGFloat(fill[card.shading.rawValue-1]))
-            ]
-        }
-    }
-    
     private func getPlayingCardBorderColor(for index:Int, withView cardView: SetCardView) {
         if game.selectedCardsIndices.contains(index) {
             if game.selectedCardsFormAMatch {
@@ -268,4 +247,13 @@ class ViewController: UIViewController {
             cardView.state = CardState.normal
         }
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setUpCardsViewsInContainerView()
+        setUpPanelViewsInContainerView()
+        containerView.setNeedsLayout()
+        containerView.setNeedsDisplay()
+    }
+    
 }

@@ -5,5 +5,7 @@ DerivedData/
 # XCode Project Directory
 *.xcodeproj/*
 
+*/xcuserdata/*
+
 # Ignore information about the directory
 *.DS_Store*
