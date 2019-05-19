@@ -11,27 +11,34 @@ import UIKit
 class ContainerView: UIView {
   
   // height ratios constants
-  private let cardsSectionHeightToOverallHeight:CGFloat = 0.9
-  private var buttonsSectionHeightToOverallHeight:CGFloat {
-    return 1-cardsSectionHeightToOverallHeight
-  }
+  private let topSectionHeightToOverallHeight:CGFloat = 0.8
+  private var middleSectionHeightToOverallHeight:CGFloat = 0.1
+  private var bottomSectionHeightToOverallHeight:CGFloat = 0.1
   
   // subvies used as sections for cards and buttons
-  private var cardsSection:CGRect  {
+  private var topSection:CGRect  {
     return CGRect(
       x: 0,
       y: 0,
       width: self.bounds.width,
-      height: self.bounds.height * cardsSectionHeightToOverallHeight)
+      height: self.bounds.height * topSectionHeightToOverallHeight)
   }
   
-
-  private var buttonsSection: CGRect {
+  private var middleSection:CGRect  {
     return CGRect(
       x: 0,
-      y: self.bounds.height * cardsSectionHeightToOverallHeight,
+      y: self.bounds.height * topSectionHeightToOverallHeight,
       width: self.bounds.width,
-      height: self.bounds.height * buttonsSectionHeightToOverallHeight)
+      height: self.bounds.height * middleSectionHeightToOverallHeight)
+  }
+
+  private var bottomSection: CGRect {
+    return CGRect(
+      x: 0,
+      y: self.bounds.height * (topSectionHeightToOverallHeight +
+        middleSectionHeightToOverallHeight),
+      width: self.bounds.width,
+      height: self.bounds.height * bottomSectionHeightToOverallHeight)
   }
   
   override func addSubview(_ view: UIView) {
@@ -48,8 +55,9 @@ class ContainerView: UIView {
   
   private func setFrameFor(_ view: UIView) {
     switch view {
-    case is CardsSectionView: view.frame = cardsSection
-    case is ButtonsSectionView: view.frame = buttonsSection
+    case is CardsSectionView: view.frame = topSection
+    case is ButtonsSectionView: view.frame = bottomSection
+    case is UILabel: view.frame = middleSection
     default:
       break
     }

@@ -16,6 +16,7 @@ class ViewController: UIViewController {
   
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
+  private var matchedSectionView: UILabel?
   
   
   private let cardAspectRatio:CGFloat = 3/5;
@@ -58,21 +59,24 @@ class ViewController: UIViewController {
   @objc private func selectCard(_ sender: UITapGestureRecognizer) {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
-      // 3 cards have formed a match
-      if game.selectedCardsFormAMatch {
-        if !game.selectedCardsIndices.contains(cardNumber) {
-          game.replaceMatchedPlayingCardsWithRandomOnes()
-          game.selectCard(at: cardNumber)
-        }
-      }
+      
       // less than 3 cards and deselecting one of them
-      else if game.selectedCardsIndices.count < 3 &&
+      if game.selectedCardsIndices.count < 3 &&
         game.selectedCardsIndices.contains(cardNumber) {
         game.deselectCard(number: cardNumber)
       }
-      // selecting a card or 3 cards that don't form a match
+        // selecting a card or 3 cards that don't form a match
       else {
         game.selectCard(at: cardNumber)
+      }
+      matchedSectionView!.text = ""
+      // 3 cards have formed a match
+      if game.selectedCardsFormAMatch {
+        matchedSectionView!.text = "MATCH!"
+        let matchingCardsIndices = game.selectedCardsIndices
+        game.replaceMatchedPlayingCardsWithRandomOnes()
+        updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
+        cardsSectionView?.setNeedsLayout()
       }
     }
     updateCardState()
@@ -113,7 +117,16 @@ class ViewController: UIViewController {
     
     buttonsSectionView = ButtonsSectionView()
     buttonsSectionView!.contentMode = .redraw
-
+    
+    matchedSectionView = UILabel()
+    matchedSectionView!.contentMode = .redraw
+    matchedSectionView!.text = ""
+    matchedSectionView!.textAlignment = .center
+    matchedSectionView!.adjustsFontSizeToFitWidth = true
+    matchedSectionView!.textColor = .white
+    matchedSectionView!.font = UIFont.preferredFont(forTextStyle: .body)
+    
+    
     for _ in 0..<numberOfCardsToStart/numberOfCardsToDealAtOnce {
       game.dealThreeCards()
     }
@@ -121,6 +134,7 @@ class ViewController: UIViewController {
     addCardsToCardsSectionView()
     addButtonsToButtonsSectionView()
     containerView.addSubview(cardsSectionView!)
+    containerView.addSubview(matchedSectionView!)
     containerView.addSubview(buttonsSectionView!)
     containerView.setNeedsLayout()
   }
@@ -136,8 +150,15 @@ class ViewController: UIViewController {
   
   private func updateCardState() {
     for cardNum in 0..<game.cardsPlaying.count {
-      let currView = cardsSectionView!.subviews[cardNum] as! SetCardView
-      getPlayingCardBorderColor(for: cardNum, withView: currView)
+      for setCardSubview in cardsSectionView!.subviews {
+        if (setCardSubview.tag == cardNum) {
+          getPlayingCardBorderColor(
+            for: cardNum,
+            withView: setCardSubview as! SetCardView)
+        }
+      }
+//      let currView = cardsSectionView!.subviews[cardNum] as! SetCardView
+//      getPlayingCardBorderColor(for: cardNum, withView: currView)
     }
   }
   
@@ -154,10 +175,10 @@ class ViewController: UIViewController {
       firstNewCardsViewIndex = numberOfCards-numberOfCardsToDealAtOnce
     }
     for cardNum in firstNewCardsViewIndex..<numberOfCards {
-        let newPos = CGRect(x: 0, y: 0, width: 0, height: 0)
-        let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
-        cardView.contentMode = .redraw
-        cardsSectionView!.addSubview(cardView)
+      let newPos = CGRect(x: 0, y: 0, width: 0, height: 0)
+      let cardView = getCardViewFrom(frame: newPos, cardNumber: cardNum)
+      cardView.contentMode = .redraw
+      cardsSectionView!.addSubview(cardView)
     }
   }
   
@@ -242,7 +263,22 @@ class ViewController: UIViewController {
     else {
       cardView.state = CardState.normal
     }
-    
+  }
+  
+  private func updateMatchedCardsViewsWithNewFaces(
+    _ matchedViewsTags: [Int])
+  {
+    matchedViewsTags.forEach { cardNumber in
+      let cardView = cardsSectionView?.subviews[cardNumber] as! SetCardView
+      let modelCard = cardAt[cardNumber]
+      cardView.updateCard(
+        shape: getShapeFrom(property: modelCard.symbol),
+        numberOfSymbols: modelCard.number.rawValue,
+        shading: getShadingFrom(property: modelCard.shading),
+        color: getColorFrom(property: modelCard.color),
+        faceUp: true
+      )
+    }
   }
   
 }
