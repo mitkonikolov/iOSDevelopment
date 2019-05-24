@@ -55,9 +55,9 @@ class ContainerView: UIView {
   
   private func setFrameFor(_ view: UIView) {
     switch view {
+    case is MatchedCardsSectionView: view.frame = middleSection
     case is CardsSectionView: view.frame = topSection
     case is ButtonsSectionView: view.frame = bottomSection
-    case is UILabel: view.frame = middleSection
     default:
       break
     }

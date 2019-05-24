@@ -16,7 +16,7 @@ class ViewController: UIViewController {
   
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
-  private var matchedSectionView: UILabel?
+  private var matchedSectionView: MatchedCardsSectionView?
   
   
   private let cardAspectRatio:CGFloat = 3/5;
@@ -60,20 +60,23 @@ class ViewController: UIViewController {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
       
+      
+      
       // less than 3 cards and deselecting one of them
       if game.selectedCardsIndices.count < 3 &&
         game.selectedCardsIndices.contains(cardNumber) {
         game.deselectCard(number: cardNumber)
+        matchedSectionView!.removeAllSubviews()
       }
-        // selecting a card or 3 cards that don't form a match
-      else {
+      // selecting a card that is not part of a match
+      else if cardView.state != CardState.matchSuccessful {
         game.selectCard(at: cardNumber)
+        matchedSectionView!.removeAllSubviews()
       }
-      matchedSectionView!.text = ""
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
-        matchedSectionView!.text = "MATCH!"
         let matchingCardsIndices = game.selectedCardsIndices
+        addMatchedCardsToMatchedSection(matchingCardsIndices)
         game.replaceMatchedPlayingCardsWithRandomOnes()
         updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
         cardsSectionView?.setNeedsLayout()
@@ -118,13 +121,16 @@ class ViewController: UIViewController {
     buttonsSectionView = ButtonsSectionView()
     buttonsSectionView!.contentMode = .redraw
     
-    matchedSectionView = UILabel()
+    matchedSectionView = MatchedCardsSectionView()
     matchedSectionView!.contentMode = .redraw
-    matchedSectionView!.text = ""
-    matchedSectionView!.textAlignment = .center
-    matchedSectionView!.adjustsFontSizeToFitWidth = true
-    matchedSectionView!.textColor = .white
-    matchedSectionView!.font = UIFont.preferredFont(forTextStyle: .body)
+    matchedSectionView!.objectsOnTheGrid = 3
+    //    matchedSectionView = UILabel()
+    //    matchedSectionView!.contentMode = .redraw
+    //    matchedSectionView!.text = ""
+    //    matchedSectionView!.textAlignment = .center
+    //    matchedSectionView!.adjustsFontSizeToFitWidth = true
+    //    matchedSectionView!.textColor = .white
+    //    matchedSectionView!.font = UIFont.preferredFont(forTextStyle: .body)
     
     
     for _ in 0..<numberOfCardsToStart/numberOfCardsToDealAtOnce {
@@ -157,8 +163,8 @@ class ViewController: UIViewController {
             withView: setCardSubview as! SetCardView)
         }
       }
-//      let currView = cardsSectionView!.subviews[cardNum] as! SetCardView
-//      getPlayingCardBorderColor(for: cardNum, withView: currView)
+      //      let currView = cardsSectionView!.subviews[cardNum] as! SetCardView
+      //      getPlayingCardBorderColor(for: cardNum, withView: currView)
     }
   }
   
@@ -265,10 +271,8 @@ class ViewController: UIViewController {
     }
   }
   
-  private func updateMatchedCardsViewsWithNewFaces(
-    _ matchedViewsTags: [Int])
-  {
-    matchedViewsTags.forEach { cardNumber in
+  private func updateMatchedCardsViewsWithNewFaces(_ matchedViewsTags: [Int]) {
+    for cardNumber in matchedViewsTags {
       let cardView = cardsSectionView?.subviews[cardNumber] as! SetCardView
       let modelCard = cardAt[cardNumber]
       cardView.updateCard(
@@ -279,6 +283,17 @@ class ViewController: UIViewController {
         faceUp: true
       )
     }
+  }
+  
+  // figure out how to make a copy of an object instead of making a new one
+  private func addMatchedCardsToMatchedSection(_ matchedViewsTags: [Int]) {
+    for cardNumber in matchedViewsTags {
+      let cardView = getCardViewFrom(frame: CGRect(x: 0, y: 0, width: 0, height: 0), cardNumber: cardNumber)
+      // invert the tag so matched cards have negative tags
+      cardView.tag = cardView.tag * (-1)
+      matchedSectionView!.addSubview(cardView)
+    }
+    matchedSectionView!.setNeedsLayout()
   }
   
 }
