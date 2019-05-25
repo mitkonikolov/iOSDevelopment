@@ -10,10 +10,25 @@ import UIKit
 
 class ContainerView: UIView {
   
-  // height ratios constants
-  private let topSectionHeightToOverallHeight:CGFloat = 0.8
+  // height ratios constants - initialized based on orientation
+  private var topSectionHeightToOverallHeight:CGFloat = 0.8
   private var middleSectionHeightToOverallHeight:CGFloat = 0.1
   private var bottomSectionHeightToOverallHeight:CGFloat = 0.1
+  
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    // portrait mode
+    if traitCollection.verticalSizeClass == .regular {
+      topSectionHeightToOverallHeight = 0.8
+      middleSectionHeightToOverallHeight = 0.1
+      bottomSectionHeightToOverallHeight = 0.1
+    } // landscape mode
+    else {
+      topSectionHeightToOverallHeight = 0.65
+      middleSectionHeightToOverallHeight = 0.25
+      bottomSectionHeightToOverallHeight = 0.1
+    }
+  }
   
   // subvies used as sections for cards and buttons
   private var topSection:CGRect  {
@@ -31,7 +46,7 @@ class ContainerView: UIView {
       width: self.bounds.width,
       height: self.bounds.height * middleSectionHeightToOverallHeight)
   }
-
+  
   private var bottomSection: CGRect {
     return CGRect(
       x: 0,

@@ -59,19 +59,19 @@ class ViewController: UIViewController {
   @objc private func selectCard(_ sender: UITapGestureRecognizer) {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
-      
-      
+      // selecting any card other than one from the matched section
+      if cardNumber>0 {
+        matchedSectionView?.removeAllSubviews()
+      }
       
       // less than 3 cards and deselecting one of them
       if game.selectedCardsIndices.count < 3 &&
         game.selectedCardsIndices.contains(cardNumber) {
         game.deselectCard(number: cardNumber)
-        matchedSectionView!.removeAllSubviews()
       }
       // selecting a card that is not part of a match
       else if cardView.state != CardState.matchSuccessful {
         game.selectCard(at: cardNumber)
-        matchedSectionView!.removeAllSubviews()
       }
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
