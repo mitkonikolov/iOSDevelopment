@@ -13,6 +13,8 @@ class ViewController: UIViewController {
   
   private let numberOfCardsToDealAtOnce = 3
   private let numberOfCardsToStart = 12
+  // 81 cards tagged 0..80
+  private let highestPossibleTag = 80
   
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
@@ -60,7 +62,7 @@ class ViewController: UIViewController {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
       // selecting any card other than one from the matched section
-      if cardNumber>0 {
+      if cardNumber>=0 {
         matchedSectionView?.removeAllSubviews()
       }
       
@@ -79,6 +81,7 @@ class ViewController: UIViewController {
         addMatchedCardsToMatchedSection(matchingCardsIndices)
         game.replaceMatchedPlayingCardsWithRandomOnes()
         updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
+        updateCardViewTagsIfNecessary(matchingCardsIndices)
         cardsSectionView?.setNeedsLayout()
       }
     }
@@ -96,6 +99,17 @@ class ViewController: UIViewController {
     containerView.setNeedsDisplay()
   }
   
+  @objc private func shuffleCardViews(_ sender: UIRotationGestureRecognizer) {
+    if sender.state == .ended {
+      if cardsSectionView != nil {
+        let subviewTwo = cardsSectionView?.subviews[2]
+        let subviewFour = cardsSectionView?.subviews[4]
+        cardsSectionView?.insertSubview(subviewTwo!, at: 4)
+        cardsSectionView?.insertSubview(subviewFour!, at: 2)
+      }
+    }
+  }
+  
   
   @IBOutlet weak var containerView: ContainerView! {
     didSet {
@@ -105,6 +119,9 @@ class ViewController: UIViewController {
       )
       swipe.direction = .down
       containerView.addGestureRecognizer(swipe)
+      
+      let rotation = UIRotationGestureRecognizer(target: self, action: #selector(shuffleCardViews))
+      containerView.addGestureRecognizer(rotation)
     }
   }
   
@@ -124,13 +141,6 @@ class ViewController: UIViewController {
     matchedSectionView = MatchedCardsSectionView()
     matchedSectionView!.contentMode = .redraw
     matchedSectionView!.objectsOnTheGrid = 3
-    //    matchedSectionView = UILabel()
-    //    matchedSectionView!.contentMode = .redraw
-    //    matchedSectionView!.text = ""
-    //    matchedSectionView!.textAlignment = .center
-    //    matchedSectionView!.adjustsFontSizeToFitWidth = true
-    //    matchedSectionView!.textColor = .white
-    //    matchedSectionView!.font = UIFont.preferredFont(forTextStyle: .body)
     
     
     for _ in 0..<numberOfCardsToStart/numberOfCardsToDealAtOnce {
@@ -273,7 +283,7 @@ class ViewController: UIViewController {
   
   private func updateMatchedCardsViewsWithNewFaces(_ matchedViewsTags: [Int]) {
     for cardNumber in matchedViewsTags {
-      let cardView = cardsSectionView?.subviews[cardNumber] as! SetCardView
+      let cardView = cardsSectionView!.viewWithTag(cardNumber) as! SetCardView
       let modelCard = cardAt[cardNumber]
       cardView.updateCard(
         shape: getShapeFrom(property: modelCard.symbol),
@@ -289,11 +299,61 @@ class ViewController: UIViewController {
   private func addMatchedCardsToMatchedSection(_ matchedViewsTags: [Int]) {
     for cardNumber in matchedViewsTags {
       let cardView = getCardViewFrom(frame: CGRect(x: 0, y: 0, width: 0, height: 0), cardNumber: cardNumber)
-      // invert the tag so matched cards have negative tags
-      cardView.tag = cardView.tag * (-1)
+      // invert the tag so matched cards have negative tags - 1
+      // 0 -> -1
+      // 1 -> -2
+      cardView.tag = (cardView.tag * (-1)) - 1
       matchedSectionView!.addSubview(cardView)
     }
     matchedSectionView!.setNeedsLayout()
+  }
+  
+  private func updateCardViewTagsIfNecessary(_ matchedViewsTags: [Int]) {
+    // the matched cards will be substituted by new ones so tags do not need to
+    // be updated
+    if !game.deck.isEmpty {
+      return
+    }
+    
+    var firstMatchedCardTag = Int.max
+    var secondMatchedCardTag = 0
+    var thirdMatchedCardTag = 0
+    for tag in matchedViewsTags {
+      // tag < first
+      if tag < firstMatchedCardTag {
+        thirdMatchedCardTag = secondMatchedCardTag
+        secondMatchedCardTag = firstMatchedCardTag
+        firstMatchedCardTag = tag
+      } // first < tag < second
+      else if tag < secondMatchedCardTag {
+        thirdMatchedCardTag = secondMatchedCardTag
+        secondMatchedCardTag = tag
+      } // second < tag
+      else {
+        thirdMatchedCardTag = tag
+      }
+    }
+    
+    var decreaseTagBy = 1
+    for tag in firstMatchedCardTag...highestPossibleTag {
+      if (tag == (secondMatchedCardTag + 1) ||
+        tag == (thirdMatchedCardTag + 1))
+      {
+        decreaseTagBy += 1
+      }
+      if let cardView = cardsSectionView?.viewWithTag(tag) {
+        if (tag == firstMatchedCardTag ||
+          tag == secondMatchedCardTag ||
+          tag == thirdMatchedCardTag) {
+          cardView.removeFromSuperview()
+        }
+        else {
+          cardView.tag = cardView.tag - decreaseTagBy
+        }
+      }
+    }
+    cardsSectionView?.objectsOnTheGrid = game.cardsPlaying.count
+    cardsSectionView?.setNeedsLayout()
   }
   
 }
