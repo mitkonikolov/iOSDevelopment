@@ -75,22 +75,12 @@ class ViewController: UIViewController {
       }
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
-        let matchingCardsIndices = game.selectedCardsIndices
-        addMatchedCardsToMatchedSection(matchingCardsIndices)
-        game.replaceMatchedPlayingCardsWithRandomOnes()
-        if game.deck.isEmpty {
-          removeMatchedViewsAndUpdateAllViewsTags(matchingCardsIndices)
-        }
-        else {
-          updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
-        }
-        cardsSectionView?.setNeedsLayout()
+        matchSuccessfulUpdateViews()
       }
     }
     updateAllCardViewsBorderColors()
     scoreLabel.text = "Score: \(game.score)"
     containerView.setNeedsLayout()
-    containerView.setNeedsDisplay()
   }
   
   
@@ -104,10 +94,10 @@ class ViewController: UIViewController {
   }
   
   @objc private func shuffleCardViews(_ sender: UIRotationGestureRecognizer) {
-    var subviews = cardsSectionView!.subviews
     if sender.state == .ended {
       var cardTagsAndNumbers:[Int] = Array(0..<game.cardsPlaying.count)
       var randomIndex = 0
+      
       while !cardTagsAndNumbers.isEmpty {
         randomIndex = Int.random(in: 0..<cardTagsAndNumbers.count)
         let tagNumber = cardTagsAndNumbers.remove(at: randomIndex)
@@ -117,27 +107,9 @@ class ViewController: UIViewController {
         let randomIndexTwo = Int.random(in: 0..<cardTagsAndNumbers.count)
         let otherTagNumber = cardTagsAndNumbers.remove(at: randomIndexTwo)
         
-        cardsSectionView!.exchangeSubview(at: randomIndex, withSubviewAt: randomIndexTwo)
-        
-        subviews = cardsSectionView!.subviews
-        
-//        let subviewTwo = cardsSectionView?.subviews[tagNumber]
-//        let subviewFour = cardsSectionView?.subviews[otherTagNumber]
-//
-//        cardsSectionView?.insertSubview(subviewTwo!, at: otherTagNumber)
-//        cardsSectionView?.insertSubview(subviewFour!, at: tagNumber)
+        cardsSectionView!.exchangeSubview(at: tagNumber, withSubviewAt: otherTagNumber)
       }
     }
-    
-//    if sender.state == .ended {
-//      if cardsSectionView != nil {
-//        let subviewTwo = cardsSectionView?.subviews[2]
-//        let subviewFour = cardsSectionView?.subviews[4]
-//        cardsSectionView?.insertSubview(subviewTwo!, at: 4)
-//        cardsSectionView?.insertSubview(subviewFour!, at: 2)
-//      }
-//    }
-    
   }
   
   
@@ -202,17 +174,22 @@ class ViewController: UIViewController {
   private func updateAllCardViewsBorderColors() {
     for cardTagAndNumber in 0..<game.cardsPlaying.count {
       let cardView = cardsSectionView!.viewWithTag(cardTagAndNumber)
-      getPlayingCardBorderColor(
-        for: cardTagAndNumber,
-        withView: cardView as! SetCardView)
+      if let setCardView = cardView as? SetCardView {
+        getPlayingCardBorderColor(for: cardTagAndNumber, withView: setCardView)
+      }
+//      getPlayingCardBorderColor(
+//        for: cardTagAndNumber,
+//        withView: cardView as? SetCardView)
     }
   }
+  
   
   func addButtonsToButtonsSectionView() {
     buttonsSectionView!.addSubview(scoreLabel)
     buttonsSectionView!.addSubview(dealThreeCardsButton)
     buttonsSectionView!.addSubview(newGameButton)
   }
+  
   
   func addCardsViewsToCardsSectionView() {
     cardsSectionView!.objectsOnTheGrid = numberOfCards
@@ -227,6 +204,7 @@ class ViewController: UIViewController {
       cardsSectionView!.addSubview(cardView)
     }
   }
+  
   
   private func getCardViewFrom(
     frame position: CGRect,
@@ -321,8 +299,6 @@ class ViewController: UIViewController {
   ///
   /// - Parameter matchedViewsTags: tags of setCardViews forming a match
   private func updateMatchedCardsViewsWithNewFaces(_ matchedViewsTags: [Int]) {
-    var cardsSectionSubviews = cardsSectionView!.subviews
-    let cardsSectionViewTag = cardsSectionView!.tag
     for cardTagAndNumber in matchedViewsTags {
       let cardView = cardsSectionView!.viewWithTag(cardTagAndNumber) as! SetCardView
       let modelCard = cardAt[cardTagAndNumber]
@@ -338,8 +314,8 @@ class ViewController: UIViewController {
   
   // figure out how to make a copy of an object instead of making a new one
   private func addMatchedCardsToMatchedSection(_ matchedViewsTags: [Int]) {
-    for cardNumber in matchedViewsTags {
-      let cardView = getCardViewFrom(frame: CGRect(x: 0, y: 0, width: 0, height: 0), cardNumber: cardNumber)
+    for cardTagAndNumber in matchedViewsTags {
+      let cardView = getCardViewFrom(frame: CGRect(x: 0, y: 0, width: 0, height: 0), cardNumber: cardTagAndNumber)
       // invert the tag so matched cards have negative tags - 1
       // 0 -> -1
       // 1 -> -2
@@ -375,7 +351,6 @@ class ViewController: UIViewController {
       }
     }
     
-    var cardsSectionSubviews = cardsSectionView!.subviews
     var decreaseTagBy = 1
     for tag in firstMatchedCardTag...highestPossibleTag {
       if (tag == (secondMatchedCardTag + 1) ||
@@ -383,7 +358,7 @@ class ViewController: UIViewController {
       {
         decreaseTagBy += 1
       }
-      if let cardView = cardsSectionView?.viewWithTag(tag) {
+      if let cardView = cardsSectionView!.viewWithTag(tag) {
         if (tag == firstMatchedCardTag ||
           tag == secondMatchedCardTag ||
           tag == thirdMatchedCardTag) {
@@ -396,6 +371,20 @@ class ViewController: UIViewController {
     }
     cardsSectionView?.objectsOnTheGrid = game.cardsPlaying.count
     cardsSectionView?.setNeedsLayout()
+  }
+  
+  
+  private func matchSuccessfulUpdateViews() {
+    let matchingCardsIndices = game.selectedCardsIndices
+    addMatchedCardsToMatchedSection(matchingCardsIndices)
+    let theDeckWasEmptyBeforeThisMatch = game.deck.isEmpty
+    game.replaceMatchedPlayingCardsWithRandomOnes()
+    if theDeckWasEmptyBeforeThisMatch {
+      removeMatchedViewsAndUpdateAllViewsTags(matchingCardsIndices)
+    }
+    else {
+      updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
+    }
   }
   
 }

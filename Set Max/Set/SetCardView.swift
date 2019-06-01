@@ -77,7 +77,15 @@ class SetCardView: UIView {
   private func createCardValueViews() -> [UIView] {
     var valueViews = [UIView]()
     for _ in 0..<numberSymbols {
-      let view = CardValueView(frame: CGRect(x: bounds.midX - (subviewSide/2), y: bounds.midY - (subviewSide/2), width: subviewSide, height: subviewSide), shape, shading, color)
+      let view = CardValueView(frame:
+        CGRect(
+          x: bounds.midX - (subviewSide/2),
+          y: bounds.midY - (subviewSide/2),
+          width: subviewSide,
+          height: subviewSide),
+        shape,
+        shading,
+        color)
       addSubview(view)
       valueViews.append(view)
     }

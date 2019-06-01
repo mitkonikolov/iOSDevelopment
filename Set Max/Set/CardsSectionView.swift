@@ -49,4 +49,13 @@ class CardsSectionView: UIView {
       }
     }
   }
+  
+  override func viewWithTag(_ tag: Int) -> UIView? {
+    for subview in subviews {
+      if subview.tag == tag {
+        return subview
+      }
+    }
+    return nil
+  }
 }
