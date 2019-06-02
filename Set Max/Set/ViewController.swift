@@ -154,6 +154,7 @@ class ViewController: UIViewController {
     
     addCardsViewsToCardsSectionView()
     addButtonsToButtonsSectionView()
+
     containerView.addSubview(cardsSectionView!)
     containerView.addSubview(matchedSectionView!)
     containerView.addSubview(buttonsSectionView!)
