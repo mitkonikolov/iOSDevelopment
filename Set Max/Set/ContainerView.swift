@@ -49,7 +49,7 @@ class ContainerView: UIView {
     setDefaultConstraints(view)
     switch view {
     case is MatchedCardsSectionView:
-      setMatchedSectionConstraints(view as! MatchedCardsSectionView)
+      setConstraints(forMatchedSection: view as! MatchedCardsSectionView)
     case is CardsSectionView:
       NSLayoutConstraint.activate(
         [
@@ -86,8 +86,10 @@ class ContainerView: UIView {
     )
   }
   
-  // TODO check if this function name follows name style guides cause it includes a class type in it
-  private func setMatchedSectionConstraints(_ view: MatchedCardsSectionView) {
+  private func setConstraints(
+    forMatchedSection view: MatchedCardsSectionView
+    )
+  {
     let margins = self.layoutMarginsGuide
     
     // for small screens this raises the max height by using proportions
