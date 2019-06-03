@@ -28,14 +28,12 @@ class ContainerView: UIView {
   
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
-    if view is MatchedCardsSectionView {
+    switch view {
+    case is MatchedCardsSectionView:
       matchedSection = view
-      matchedSection?.backgroundColor = .green
-    }
-    else if view is ButtonsSectionView {
+    case is ButtonsSectionView:
       buttonsSection = view
-    }
-    else {
+    default:
       cardsSection = view
     }
     if subviews.count == 3 {
@@ -103,6 +101,10 @@ class ContainerView: UIView {
     maxHeight: CGFloat,
     minHeight: CGFloat)
   {
+    assert(
+      view is MatchedCardsSectionView || view is ButtonsSectionView,
+      "setConstraints(forMatchedOrButtonsSection ...): view must be of type " +
+      "MatchedCardsSectionView or ButtonsSectionView")
     // for small screens this raises the max height by using proportions
     let heightProportion = view.heightAnchor.constraint(
       lessThanOrEqualTo: layoutMarginsGuide.heightAnchor,
