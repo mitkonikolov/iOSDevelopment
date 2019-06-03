@@ -10,10 +10,17 @@ import UIKit
 
 class ContainerView: UIView {
   
-  // height ratios constants - initialized based on orientation
-  private var topSectionHeightToOverallHeight:CGFloat = 0.8
-  private var middleSectionHeightToOverallHeight:CGFloat = 0.1
-  private var bottomSectionHeightToOverallHeight:CGFloat = 0.1
+  // height constants for matched section
+  // max height as sectionHeight/containerViewHeight
+  private let matchedMaxProportionalHeight:CGFloat = 0.2
+  private let matchedAbsHeightMax:CGFloat = 200
+  private let matchedAbsHeightMin:CGFloat = 100
+  // height constants for buttons section
+  private let buttonsMaxProportionalHeight:CGFloat = 0.1
+  private let buttonsAbsHeightMax:CGFloat = 50
+  private let buttonsAbsHeightMin:CGFloat = 40
+  // priority used for lower priority constraints
+  private let proportionConstraintPriority:Float = 750
   
   private var cardsSection:UIView?
   private var matchedSection:UIView?
@@ -49,7 +56,13 @@ class ContainerView: UIView {
     setDefaultConstraints(view)
     switch view {
     case is MatchedCardsSectionView:
-      setConstraints(forMatchedSection: view as! MatchedCardsSectionView)
+      setConstraints(
+        forMatchedOrButtonSection: view,
+        maxProportionalHeight: matchedMaxProportionalHeight,
+        bottomAnchor: buttonsSection!.topAnchor,
+        topAnchor: cardsSection!.bottomAnchor,
+        maxHeight: matchedAbsHeightMax,
+        minHeight: matchedAbsHeightMin)
     case is CardsSectionView:
       NSLayoutConstraint.activate(
         [
@@ -58,17 +71,13 @@ class ContainerView: UIView {
         ]
       )
     case is ButtonsSectionView:
-      let heightProportion = view.heightAnchor.constraint(lessThanOrEqualTo: margins.heightAnchor, multiplier: 0.1)
-      heightProportion.priority = UILayoutPriority(rawValue: 750)
-      NSLayoutConstraint.activate(
-        [
-          view.bottomAnchor.constraint(equalTo: margins.bottomAnchor),
-          heightProportion,
-          view.heightAnchor.constraint(lessThanOrEqualToConstant: 50),
-          view.heightAnchor.constraint(greaterThanOrEqualToConstant: 40),
-          view.topAnchor.constraint(equalTo: matchedSection!.bottomAnchor)
-        ]
-      )
+      setConstraints(
+        forMatchedOrButtonSection: view,
+        maxProportionalHeight: buttonsMaxProportionalHeight,
+        bottomAnchor: margins.bottomAnchor,
+        topAnchor: matchedSection!.bottomAnchor,
+        maxHeight: buttonsAbsHeightMax,
+        minHeight: buttonsAbsHeightMin)
     default:
       break
     }
@@ -87,22 +96,30 @@ class ContainerView: UIView {
   }
   
   private func setConstraints(
-    forMatchedSection view: MatchedCardsSectionView
-    )
+    forMatchedOrButtonSection view: UIView,
+    maxProportionalHeight heightMultiplier: CGFloat,
+    bottomAnchor: NSLayoutYAxisAnchor,
+    topAnchor: NSLayoutYAxisAnchor,
+    maxHeight: CGFloat,
+    minHeight: CGFloat)
   {
-    let margins = self.layoutMarginsGuide
-    
     // for small screens this raises the max height by using proportions
-    let heightProportion = view.heightAnchor.constraint(lessThanOrEqualTo: margins.heightAnchor, multiplier: 0.2)
-    heightProportion.priority = UILayoutPriority(rawValue: 750)
+    let heightProportion = view.heightAnchor.constraint(
+      lessThanOrEqualTo: layoutMarginsGuide.heightAnchor,
+      multiplier: heightMultiplier)
+    heightProportion.priority = UILayoutPriority(
+      rawValue: proportionConstraintPriority)
+    
     NSLayoutConstraint.activate(
       [
-        view.bottomAnchor.constraint(equalTo: buttonsSection!.topAnchor),
-        view.topAnchor.constraint(equalTo: cardsSection!.bottomAnchor),
+        view.bottomAnchor.constraint(equalTo: bottomAnchor),
+        view.topAnchor.constraint(equalTo: topAnchor),
         heightProportion,
-        // for large screens this limits the max height by using an absolute limit
-        view.heightAnchor.constraint(lessThanOrEqualToConstant: 200),
-        view.heightAnchor.constraint(greaterThanOrEqualToConstant: 100)
+        // large screens: limits the max height by using an absolute limit
+        view.heightAnchor.constraint(
+          lessThanOrEqualToConstant: maxHeight),
+        view.heightAnchor.constraint(
+          greaterThanOrEqualToConstant: minHeight)
       ]
     )
   }
