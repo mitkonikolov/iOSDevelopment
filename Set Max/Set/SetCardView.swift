@@ -26,6 +26,11 @@ class SetCardView: UIView {
     }
   }
   
+  private let cardColor: UIColor = #colorLiteral(red: 0.5806095053, green: 0.7069122779, blue: 0.644942451, alpha: 1)
+  private let highlightedColor: UIColor = .yellow
+  private let successfulMatchColor: UIColor = .green
+  private let failedMatchColor: UIColor = .red
+  
   
   
   public var state = CardState.normal { didSet {setNeedsDisplay(); setNeedsLayout()} }
@@ -108,19 +113,16 @@ class SetCardView: UIView {
   override func draw(_ rect: CGRect) {
     let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: 15)
     roundedRect.addClip()
-    UIColor.lightGray.setFill()
+    cardColor.setFill()
     roundedRect.fill()
     
-    UIColor.lightGray.setStroke()
+    cardColor.setStroke()
     roundedRect.lineWidth = 3
-    if state == CardState.highlighted {
-      UIColor.yellow.setStroke()
-    }
-    else if state == CardState.matchSuccessful {
-      UIColor.green.setStroke()
-    }
-    else if state == CardState.matchFailed {
-      UIColor.red.setStroke()
+    switch state {
+    case .highlighted: highlightedColor.setStroke()
+    case .matchSuccessful: successfulMatchColor.setStroke()
+    case .matchFailed: failedMatchColor.setStroke()
+    default: break
     }
     roundedRect.stroke()
   }
