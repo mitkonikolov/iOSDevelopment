@@ -49,6 +49,12 @@ class ContainerView: UIView {
     }
   }
   
+  func removeAllSubviews() {
+    subviews.forEach { view in
+      view.removeFromSuperview()
+    }
+  }
+  
   private func setConstraintsFor(_ view: UIView) {
     let margins = self.layoutMarginsGuide
     setDefaultConstraints(view)

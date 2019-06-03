@@ -21,7 +21,6 @@ class ViewController: UIViewController {
   private var buttonsSectionView: ButtonsSectionView?
   private var matchedSectionView: MatchedCardsSectionView?
   
-  
   private let cardAspectRatio:CGFloat = 3/5;
   
   private var numberOfCards: Int {
@@ -42,6 +41,7 @@ class ViewController: UIViewController {
       target: self,
       action: #selector(dealThreeCards))
     dealCards.setTitle("Deal \(numberOfCardsToDealAtOnce) Cards", for: .normal)
+    dealCards.setTitleColor(.black, for: .normal)
     dealCards.addGestureRecognizer(tap)
     dealCards.contentMode = .redraw
     return dealCards
@@ -52,6 +52,7 @@ class ViewController: UIViewController {
     let tap = UITapGestureRecognizer(target: self, action: #selector(newGame))
     button.setTitle("New Game", for: .normal)
     button.addGestureRecognizer(tap)
+    button.setTitleColor(.black, for: .normal)
     button.contentMode = .redraw
     return button
   }
@@ -73,6 +74,7 @@ class ViewController: UIViewController {
       else if cardView.state != CardState.matchSuccessful {
         game.selectCard(at: cardNumber)
       }
+      
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
         matchSuccessfulUpdateViews()
@@ -131,39 +133,48 @@ class ViewController: UIViewController {
   
   @objc private func newGame(_ sender: UIButton) {
     game = Set()
-    containerView.subviews.forEach { view in
-      view.removeFromSuperview()
-    }
+    containerView.removeAllSubviews()
     setUpScoreLabel()
-    
+    setUpCardsSection()
+    setUpButtonsSection()
+    setUpMatchedSection()
+    addAllSectionsToContainerView()
+    containerView.setNeedsLayout()
+  }
+  
+  private func setUpCardsSection() {
     cardsSectionView = CardsSectionView()
     cardsSectionView!.contentMode = .redraw
     cardsSectionView!.tag = Int.max
-    
-    buttonsSectionView = ButtonsSectionView()
-    buttonsSectionView!.contentMode = .redraw
-    
-    matchedSectionView = MatchedCardsSectionView()
-    matchedSectionView!.contentMode = .redraw
-    matchedSectionView!.objectsOnTheGrid = numberOfCardsToMakeAMatch
-    
     
     for _ in 0..<numberOfCardsToStart/numberOfCardsToDealAtOnce {
       game.dealThreeCards()
     }
     
     addCardsViewsToCardsSectionView()
+  }
+  
+  private func setUpButtonsSection() {
+    buttonsSectionView = ButtonsSectionView()
+    buttonsSectionView!.contentMode = .redraw
     addButtonsToButtonsSectionView()
-
+  }
+  
+  private func setUpMatchedSection() {
+    matchedSectionView = MatchedCardsSectionView()
+    matchedSectionView!.contentMode = .redraw
+    matchedSectionView!.objectsOnTheGrid = numberOfCardsToMakeAMatch
+  }
+  
+  private func addAllSectionsToContainerView() {
     containerView.addSubview(cardsSectionView!)
     containerView.addSubview(matchedSectionView!)
     containerView.addSubview(buttonsSectionView!)
-    containerView.setNeedsLayout()
   }
   
   private func setUpScoreLabel() {
     scoreLabel.textAlignment = NSTextAlignment.center
-    scoreLabel.textColor = UIColor.white
+//    scoreLabel.textColor = UIColor.white
     scoreLabel.backgroundColor = UIColor.clear
     scoreLabel.adjustsFontSizeToFitWidth = true
     scoreLabel.contentMode = .redraw
