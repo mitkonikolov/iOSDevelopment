@@ -26,10 +26,13 @@ class SetCardView: UIView {
     }
   }
   
-  private let cardColor: UIColor = #colorLiteral(red: 0.5806095053, green: 0.7069122779, blue: 0.644942451, alpha: 1)
-  private let highlightedColor: UIColor = .yellow
-  private let successfulMatchColor: UIColor = .green
-  private let failedMatchColor: UIColor = .red
+  private let cardBodyColor = #colorLiteral(red: 1, green: 0.9989223741, blue: 0.9884161901, alpha: 1)
+  private let cardOutlineColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+  private let highlightedColor = #colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)
+  private let successfulMatchColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+  private let failedMatchColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+  
+  private let outlineWidth:CGFloat = 5
   
   
   
@@ -113,11 +116,10 @@ class SetCardView: UIView {
   override func draw(_ rect: CGRect) {
     let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: 15)
     roundedRect.addClip()
-    cardColor.setFill()
+    cardBodyColor.setFill()
     roundedRect.fill()
-    
-    cardColor.setStroke()
-    roundedRect.lineWidth = 3
+    cardOutlineColor.setStroke()
+    roundedRect.lineWidth = outlineWidth
     switch state {
     case .highlighted: highlightedColor.setStroke()
     case .matchSuccessful: successfulMatchColor.setStroke()
