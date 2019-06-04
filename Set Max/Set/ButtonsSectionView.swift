@@ -10,33 +10,61 @@ import UIKit
 
 class ButtonsSectionView: UIView {
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
   
-  override func draw(_ rect: CGRect) {
-    self.layoutSubviews()
+  
+//  override func draw(_ rect: CGRect) {
+//    self.layoutSubviews()
+//  }
+  
+  private var scoreLabel: UILabel?
+  private var dealCardsButton: UIButton?
+  private var newGameButton: UIButton?
+  
+  override func addSubview(_ view: UIView) {
+    super.addSubview(view)
+    if subviews.count==3 {
+      setLayoutConstraints()
+    }
+  }
+  
+  func addLabelSubview(_ labelView: UILabel) {
+    addSubview(labelView)
+    scoreLabel = labelView
+  }
+  
+  func addButtonSubview(_ buttonView: UIButton) {
+    if buttonView.title(for: .normal)!.lowercased().contains("new") {
+      newGameButton = buttonView
+    }
+    else {
+      dealCardsButton = buttonView
+    }
+    addSubview(buttonView)
   }
   
   override func layoutSubviews() {
-    var subviewsAlreadySet = 0
-    for view in subviews {
-      setFrameAndSizeFor(view, subviewsBefore: subviewsAlreadySet)
+    subviews.forEach { view in
       view.setNeedsDisplay()
-      subviewsAlreadySet += 1
     }
   }
   
-  func setFrameAndSizeFor(_ subview: UIView, subviewsBefore: Int) {
-    let widthForEachView = Int(self.bounds.width) / subviews.count
-    subview.frame = CGRect(
-      x: CGFloat(subviewsBefore * widthForEachView),
-      y: self.bounds.origin.y,
-      width: CGFloat(widthForEachView),
-      height: self.bounds.height)
+  private func setLayoutConstraints() {
+    let margins = self.layoutMarginsGuide
+    subviews.forEach { view in
+      view.translatesAutoresizingMaskIntoConstraints = false
+    }
+    NSLayoutConstraint.activate(
+      [
+        scoreLabel!.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+        scoreLabel!.trailingAnchor.constraint(equalTo: dealCardsButton!.leadingAnchor),
+        dealCardsButton!.leadingAnchor.constraint(
+          equalTo: scoreLabel!.trailingAnchor),
+        newGameButton!.trailingAnchor.constraint(
+          equalTo: margins.trailingAnchor),
+        newGameButton!.leadingAnchor.constraint(
+          equalTo: dealCardsButton!.trailingAnchor)
+      ]
+    )
+    
   }
 }

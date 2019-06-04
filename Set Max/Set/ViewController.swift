@@ -44,6 +44,7 @@ class ViewController: UIViewController {
     dealCards.setTitleColor(.black, for: .normal)
     dealCards.addGestureRecognizer(tap)
     dealCards.contentMode = .redraw
+    
     return dealCards
   }
   
@@ -54,6 +55,7 @@ class ViewController: UIViewController {
     button.addGestureRecognizer(tap)
     button.setTitleColor(.black, for: .normal)
     button.contentMode = .redraw
+    
     return button
   }
   
@@ -174,7 +176,6 @@ class ViewController: UIViewController {
   
   private func setUpScoreLabel() {
     scoreLabel.textAlignment = NSTextAlignment.center
-//    scoreLabel.textColor = UIColor.white
     scoreLabel.backgroundColor = UIColor.clear
     scoreLabel.adjustsFontSizeToFitWidth = true
     scoreLabel.contentMode = .redraw
@@ -197,9 +198,9 @@ class ViewController: UIViewController {
   
   
   func addButtonsToButtonsSectionView() {
-    buttonsSectionView!.addSubview(scoreLabel)
-    buttonsSectionView!.addSubview(dealThreeCardsButton)
-    buttonsSectionView!.addSubview(newGameButton)
+    buttonsSectionView!.addLabelSubview(scoreLabel)
+    buttonsSectionView!.addButtonSubview(dealThreeCardsButton)
+    buttonsSectionView!.addButtonSubview(newGameButton)
   }
   
   
