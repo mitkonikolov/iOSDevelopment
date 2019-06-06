@@ -43,6 +43,7 @@ class ViewController: UIViewController {
     dealCards.setTitle("Deal \(numberOfCardsToDealAtOnce) Cards", for: .normal)
     dealCards.setTitleColor(.black, for: .normal)
     dealCards.addGestureRecognizer(tap)
+    dealCards.titleLabel?.adjustsFontSizeToFitWidth = true
     dealCards.contentMode = .redraw
     
     return dealCards
@@ -54,6 +55,7 @@ class ViewController: UIViewController {
     button.setTitle("New Game", for: .normal)
     button.addGestureRecognizer(tap)
     button.setTitleColor(.black, for: .normal)
+    button.titleLabel?.adjustsFontSizeToFitWidth = true
     button.contentMode = .redraw
     
     return button
