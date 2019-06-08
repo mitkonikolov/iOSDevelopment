@@ -26,6 +26,10 @@ class ContainerView: UIView {
   private var matchedSection:UIView?
   private var buttonsSection:UIView?
   
+  func bringMatchedToFront() {
+    bringSubviewToFront(matchedSection!)
+  }
+  
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
     switch view {
@@ -64,14 +68,16 @@ class ContainerView: UIView {
         forMatchedOrButtonSection: view,
         maxProportionalHeight: matchedMaxProportionalHeight,
         bottomAnchor: buttonsSection!.topAnchor,
-        topAnchor: cardsSection!.bottomAnchor,
+        topAnchor: margins.topAnchor,
+        verticalCenterAnchor: margins.centerYAnchor,
         maxHeight: matchedAbsHeightMax,
         minHeight: matchedAbsHeightMin)
+      sendSubviewToBack(view)
     case is CardsSectionView:
       NSLayoutConstraint.activate(
         [
           view.topAnchor.constraint(equalTo: margins.topAnchor),
-          view.bottomAnchor.constraint(equalTo: matchedSection!.topAnchor)
+          view.bottomAnchor.constraint(equalTo: buttonsSection!.topAnchor)
         ]
       )
     case is ButtonsSectionView:
@@ -79,7 +85,8 @@ class ContainerView: UIView {
         forMatchedOrButtonSection: view,
         maxProportionalHeight: buttonsMaxProportionalHeight,
         bottomAnchor: margins.bottomAnchor,
-        topAnchor: matchedSection!.bottomAnchor,
+        topAnchor: cardsSection!.bottomAnchor,
+        verticalCenterAnchor: margins.centerYAnchor,
         maxHeight: buttonsAbsHeightMax,
         minHeight: buttonsAbsHeightMin)
     default:
@@ -104,6 +111,7 @@ class ContainerView: UIView {
     maxProportionalHeight heightMultiplier: CGFloat,
     bottomAnchor: NSLayoutYAxisAnchor,
     topAnchor: NSLayoutYAxisAnchor,
+    verticalCenterAnchor: NSLayoutYAxisAnchor,
     maxHeight: CGFloat,
     minHeight: CGFloat)
   {
@@ -120,8 +128,6 @@ class ContainerView: UIView {
     
     NSLayoutConstraint.activate(
       [
-        view.bottomAnchor.constraint(equalTo: bottomAnchor),
-        view.topAnchor.constraint(equalTo: topAnchor),
         heightProportion,
         // large screens: limits the max height by using an absolute limit
         view.heightAnchor.constraint(
@@ -130,6 +136,15 @@ class ContainerView: UIView {
           greaterThanOrEqualToConstant: minHeight)
       ]
     )
+    
+    if view is ButtonsSectionView {
+      view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+      view.topAnchor.constraint(equalTo: topAnchor).isActive = true
+    }
+    else {
+      view.centerYAnchor.constraint(equalTo: verticalCenterAnchor)
+        .isActive = true
+    }
   }
 
 }

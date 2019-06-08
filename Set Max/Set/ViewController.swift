@@ -65,9 +65,7 @@ class ViewController: UIViewController {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
       // selecting any card other than one from the matched section
-      if cardNumber>=0 {
-        matchedSectionView?.removeAllSubviews()
-      }
+      resetMatchedSection()
       
       // less than 3 cards and deselecting one of them
       if game.selectedCardsIndices.count < 3 &&
@@ -82,8 +80,10 @@ class ViewController: UIViewController {
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
         matchSuccessfulUpdateViews()
+        containerView.bringMatchedToFront()
       }
     }
+//    matchedSectionView!.removeAllSubviews()
     updateAllCardViewsBorderColors()
     scoreLabel.text = "Score: \(game.score)"
     containerView.setNeedsLayout()
@@ -132,6 +132,22 @@ class ViewController: UIViewController {
         target: self,
         action: #selector(shuffleCardViews))
       containerView.addGestureRecognizer(rotation)
+      
+      let touch = UITapGestureRecognizer(
+        target: self,
+        action: #selector(resetMatchedSectionTapAction))
+      containerView.addGestureRecognizer(touch)
+    }
+  }
+  
+  @objc private func resetMatchedSectionTapAction(_ sender: UIButton) {
+    resetMatchedSection()
+  }
+  
+  private func resetMatchedSection() {
+    if matchedSectionView?.subviews.count == 3 {
+      matchedSectionView!.removeAllSubviews()
+      containerView.sendSubviewToBack(matchedSectionView!)
     }
   }
   
