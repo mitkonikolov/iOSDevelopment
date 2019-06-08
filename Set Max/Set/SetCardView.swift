@@ -32,11 +32,16 @@ class SetCardView: UIView {
   private let successfulMatchColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
   private let failedMatchColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
   
-  private let outlineWidth:CGFloat = 5
+  private let outlineStrokeWidth:CGFloat = 5
+  private let cornerRadiusToSelfHeight: CGFloat = 0.15
   
   
   
   public var state = CardState.normal { didSet {setNeedsDisplay(); setNeedsLayout()} }
+  
+  required init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+  }
   
   public init(frame: CGRect, shape: Shape, numSymbols: Int, shading: Shading, shapeColor: UIColor, faceUp: Bool) {
     super.init(frame: frame)
@@ -61,11 +66,6 @@ class SetCardView: UIView {
     self.shading = shading
     self.color = color
     self.faceUp = faceUp
-  }
-  
-  
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
   }
   
   private var subviewSide:CGFloat {
@@ -114,12 +114,15 @@ class SetCardView: UIView {
   
   // draw the current view
   override func draw(_ rect: CGRect) {
-    let roundedRect = UIBezierPath(roundedRect: bounds, cornerRadius: 15)
+    let cornerRadius = bounds.height * cornerRadiusToSelfHeight
+    let roundedRect = UIBezierPath(
+      roundedRect: bounds,
+      cornerRadius: cornerRadius)
     roundedRect.addClip()
     cardBodyColor.setFill()
     roundedRect.fill()
     cardOutlineColor.setStroke()
-    roundedRect.lineWidth = outlineWidth
+    roundedRect.lineWidth = outlineStrokeWidth
     switch state {
     case .highlighted: highlightedColor.setStroke()
     case .matchSuccessful: successfulMatchColor.setStroke()
@@ -127,11 +130,5 @@ class SetCardView: UIView {
     default: break
     }
     roundedRect.stroke()
-  }
-  
-  // changes in orientation, font size, etc. are trait changes
-  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    setNeedsDisplay()
-    setNeedsLayout()
   }
 }
