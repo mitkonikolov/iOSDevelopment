@@ -188,6 +188,7 @@ class ViewController: UIViewController {
   }
   
   private func addAllSectionsToContainerView() {
+    containerView.addSubview(scoreLabel)
     containerView.addSubview(cardsSectionView!)
     containerView.addSubview(matchedSectionView!)
     containerView.addSubview(buttonsSectionView!)
@@ -215,7 +216,7 @@ class ViewController: UIViewController {
   
   
   func addButtonsToButtonsSectionView() {
-    buttonsSectionView!.addLabelSubview(scoreLabel)
+//    buttonsSectionView!.addLabelSubview(scoreLabel)
     buttonsSectionView!.addButtonSubview(dealThreeCardsButton)
     buttonsSectionView!.addButtonSubview(newGameButton)
   }

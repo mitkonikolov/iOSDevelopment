@@ -12,8 +12,8 @@ class ContainerView: UIView {
   
   // height constants for matched section
   // max height as sectionHeight/containerViewHeight
-  private let matchedMaxProportionalHeight:CGFloat = 0.2
-  private let matchedAbsHeightMax:CGFloat = 200
+  private let matchedMaxProportionalHeight:CGFloat = 0.4
+  private let matchedAbsHeightMax:CGFloat = 400
   private let matchedAbsHeightMin:CGFloat = 100
   // height constants for buttons section
   private let buttonsMaxProportionalHeight:CGFloat = 0.1
@@ -25,6 +25,9 @@ class ContainerView: UIView {
   private var cardsSection:UIView?
   private var matchedSection:UIView?
   private var buttonsSection:UIView?
+  private var labelSection: UIView?
+  
+  private let expectedSubviews = 4
   
   func bringMatchedToFront() {
     bringSubviewToFront(matchedSection!)
@@ -33,14 +36,12 @@ class ContainerView: UIView {
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
     switch view {
-    case is MatchedCardsSectionView:
-      matchedSection = view
-    case is ButtonsSectionView:
-      buttonsSection = view
-    default:
-      cardsSection = view
+    case is MatchedCardsSectionView: matchedSection = view
+    case is ButtonsSectionView: buttonsSection = view
+    case is UILabel: labelSection = view
+    default: cardsSection = view
     }
-    if subviews.count == 3 {
+    if subviews.count == expectedSubviews {
       subviews.forEach { view in
         setConstraintsFor(view)
       }
@@ -77,7 +78,7 @@ class ContainerView: UIView {
       NSLayoutConstraint.activate(
         [
           view.topAnchor.constraint(equalTo: margins.topAnchor),
-          view.bottomAnchor.constraint(equalTo: buttonsSection!.topAnchor)
+          view.bottomAnchor.constraint(equalTo: labelSection!.topAnchor)
         ]
       )
     case is ButtonsSectionView:
@@ -85,6 +86,15 @@ class ContainerView: UIView {
         forMatchedOrButtonSection: view,
         maxProportionalHeight: buttonsMaxProportionalHeight,
         bottomAnchor: margins.bottomAnchor,
+        topAnchor: labelSection!.bottomAnchor,
+        verticalCenterAnchor: margins.centerYAnchor,
+        maxHeight: buttonsAbsHeightMax,
+        minHeight: buttonsAbsHeightMin)
+    case is UILabel:
+      setConstraints(
+        forMatchedOrButtonSection: view,
+        maxProportionalHeight: buttonsMaxProportionalHeight,
+        bottomAnchor: buttonsSection!.topAnchor,
         topAnchor: cardsSection!.bottomAnchor,
         verticalCenterAnchor: margins.centerYAnchor,
         maxHeight: buttonsAbsHeightMax,
@@ -116,9 +126,11 @@ class ContainerView: UIView {
     minHeight: CGFloat)
   {
     assert(
-      view is MatchedCardsSectionView || view is ButtonsSectionView,
+      view is MatchedCardsSectionView ||
+        view is ButtonsSectionView ||
+        view is UILabel,
       "setConstraints(forMatchedOrButtonsSection ...): view must be of type " +
-      "MatchedCardsSectionView or ButtonsSectionView")
+      "MatchedCardsSectionView, ButtonsSectionView or UILabel")
     // for small screens this raises the max height by using proportions
     let heightProportion = view.heightAnchor.constraint(
       lessThanOrEqualTo: layoutMarginsGuide.heightAnchor,
@@ -137,13 +149,13 @@ class ContainerView: UIView {
       ]
     )
     
-    if view is ButtonsSectionView {
-      view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-      view.topAnchor.constraint(equalTo: topAnchor).isActive = true
-    }
-    else {
+    if view is MatchedCardsSectionView {
       view.centerYAnchor.constraint(equalTo: verticalCenterAnchor)
         .isActive = true
+    }
+    else {
+      view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+      view.topAnchor.constraint(equalTo: topAnchor).isActive = true
     }
   }
 

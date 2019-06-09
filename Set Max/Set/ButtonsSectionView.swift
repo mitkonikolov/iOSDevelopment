@@ -10,25 +10,19 @@ import UIKit
 
 class ButtonsSectionView: UIView {
   
-  private var scoreLabel: UILabel?
   private var dealCardsButton: UIButton?
   private var newGameButton: UIButton?
+
+  private let dealCardsMaxProportionalWidth:CGFloat = 0.5
+  private let newGameMaxProportionalWidth:CGFloat = 0.5
   
-  
-  private let scoreMaxProportionalWidth:CGFloat = 0.26
-  private let dealCardsMaxProportionalWidth:CGFloat = 0.4
-  private let newGameMaxProportionalWidth:CGFloat = 0.34
+  private let expectedSubviews = 2
   
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
-    if subviews.count==3 {
+    if subviews.count == expectedSubviews {
       setLayoutConstraints()
     }
-  }
-  
-  func addLabelSubview(_ labelView: UILabel) {
-    scoreLabel = labelView
-    addSubview(labelView)
   }
   
   func addButtonSubview(_ buttonView: UIButton) {
@@ -56,13 +50,8 @@ class ButtonsSectionView: UIView {
     }
     NSLayoutConstraint.activate(
       [
-        scoreLabel!.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
-        scoreLabel!.trailingAnchor.constraint(equalTo: dealCardsButton!.leadingAnchor),
-        scoreLabel!.widthAnchor.constraint(
-          lessThanOrEqualTo: margins.widthAnchor,
-          multiplier: scoreMaxProportionalWidth),
         dealCardsButton!.leadingAnchor.constraint(
-          equalTo: scoreLabel!.trailingAnchor),
+          equalTo: margins.leadingAnchor),
         dealCardsButton!.widthAnchor.constraint(
           lessThanOrEqualTo: margins.widthAnchor,
           multiplier: dealCardsMaxProportionalWidth),
