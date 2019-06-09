@@ -15,9 +15,9 @@ class ButtonsSectionView: UIView {
   private var newGameButton: UIButton?
   
   
-  private let scoreMaxProportionalWidth:CGFloat = 0.3
+  private let scoreMaxProportionalWidth:CGFloat = 0.26
   private let dealCardsMaxProportionalWidth:CGFloat = 0.4
-  private let newGameMaxProportionalWidth:CGFloat = 0.3
+  private let newGameMaxProportionalWidth:CGFloat = 0.34
   
   override func addSubview(_ view: UIView) {
     super.addSubview(view)

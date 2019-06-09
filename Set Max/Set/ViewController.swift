@@ -43,7 +43,8 @@ class ViewController: UIViewController {
     dealCards.setTitle("Deal \(numberOfCardsToDealAtOnce) Cards", for: .normal)
     dealCards.setTitleColor(.black, for: .normal)
     dealCards.addGestureRecognizer(tap)
-    dealCards.titleLabel?.adjustsFontSizeToFitWidth = true
+    dealCards.titleLabel!.font = UIFont.preferredFont(forTextStyle: .body)
+    dealCards.titleLabel!.adjustsFontSizeToFitWidth = true
     dealCards.contentMode = .redraw
     
     return dealCards
@@ -55,7 +56,8 @@ class ViewController: UIViewController {
     button.setTitle("New Game", for: .normal)
     button.addGestureRecognizer(tap)
     button.setTitleColor(.black, for: .normal)
-    button.titleLabel?.adjustsFontSizeToFitWidth = true
+    button.titleLabel!.font = UIFont.preferredFont(forTextStyle: .body)
+    button.titleLabel!.adjustsFontSizeToFitWidth = true
     button.contentMode = .redraw
     
     return button
@@ -83,7 +85,6 @@ class ViewController: UIViewController {
         containerView.bringMatchedToFront()
       }
     }
-//    matchedSectionView!.removeAllSubviews()
     updateAllCardViewsBorderColors()
     scoreLabel.text = "Score: \(game.score)"
     containerView.setNeedsLayout()
@@ -195,6 +196,7 @@ class ViewController: UIViewController {
   private func setUpScoreLabel() {
     scoreLabel.textAlignment = NSTextAlignment.center
     scoreLabel.backgroundColor = UIColor.clear
+    scoreLabel.font = UIFont.preferredFont(forTextStyle: .body)
     scoreLabel.adjustsFontSizeToFitWidth = true
     scoreLabel.contentMode = .redraw
     scoreLabel.text = "Score: \(game.score)"
@@ -208,9 +210,6 @@ class ViewController: UIViewController {
       if let setCardView = cardView as? SetCardView {
         getPlayingCardBorderColor(for: cardTagAndNumber, withView: setCardView)
       }
-//      getPlayingCardBorderColor(
-//        for: cardTagAndNumber,
-//        withView: cardView as? SetCardView)
     }
   }
   
