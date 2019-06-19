@@ -9,8 +9,8 @@
 import Foundation
 
 enum CardState {
-    case normal
-    case highlighted
-    case matchSuccessful
-    case matchFailed
+  case normal
+  case highlighted
+  case matchSuccessful
+  case matchFailed
 }

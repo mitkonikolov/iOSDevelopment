@@ -12,25 +12,24 @@ class CardValueView: UIView {
   private var shape = Shape.circle
   private var shading = Shading.striped
   private var color = UIColor.red
-  private let boundToRadiusRatio:CGFloat = 0.5
-  private var minBound:CGFloat {
-    if(bounds.maxX<bounds.maxY) {
+  private let boundToRadiusRatio: CGFloat = 0.5
+
+  private var minBound: CGFloat {
+    if bounds.maxX<bounds.maxY {
       return bounds.maxX
-    }
-    else {
+    } else {
       return bounds.maxX
     }
   }
-  
+
   private let green = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
   private let red = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
   private let blue = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
-  
-  
+
   init(frame: CGRect, _ shape: Shape, _ shading: Shading, _ color: UIColor) {
     super.init(frame: frame)
     backgroundColor = UIColor.clear
-    
+
     self.shape = shape
     self.shading = shading
     switch color {
@@ -40,21 +39,29 @@ class CardValueView: UIView {
     default: break
     }
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   override func draw(_ rect: CGRect) {
     var path = UIBezierPath()
     switch shape {
     case .circle:
-      path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: minBound*boundToRadiusRatio, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
+      path.addArc(
+        withCenter: CGPoint(x: bounds.midX, y: bounds.midY),
+        radius: minBound*boundToRadiusRatio,
+        startAngle: 0,
+        endAngle: 2*CGFloat.pi,
+        clockwise: true
+      )
     case .square:
-      path = UIBezierPath(rect: CGRect(x: 0, y: 0, width: minBound, height: minBound))
+      path = UIBezierPath(
+        rect: CGRect(x: 0, y: 0, width: minBound, height: minBound)
+      )
     default:
       path.move(to: CGPoint(x: bounds.midX, y: 0))
-      path.addLine(to: CGPoint(x: 0, y:bounds.maxY))
+      path.addLine(to: CGPoint(x: 0, y: bounds.maxY))
       path.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
       path.close()
     }
@@ -62,26 +69,34 @@ class CardValueView: UIView {
     path.lineWidth = 2
     color.setStroke()
     path.stroke()
-    if(shading == .full) {
+    if shading == .full {
       color.setFill()
       path.fill()
-    }
-    else if(shading == .striped) {
+    } else if shading == .striped {
       path.lineWidth = 1
-      var stripingStep:CGFloat = 2
+      var stripingStep: CGFloat = 2
       if path.bounds.width<10 {
         stripingStep = 1
       }
-      
+
       for lineNum in 1..<8 {
-        path.move(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/stripingStep), y: 0))
-        path.addLine(to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/stripingStep), y: bounds.maxY))
+        path.move(
+          to: CGPoint(x: CGFloat(lineNum) * (bounds.midX/stripingStep), y: 0)
+        )
+        path.addLine(
+          to: CGPoint(
+            x: CGFloat(lineNum) * (bounds.midX/stripingStep),
+            y: bounds.maxY
+          )
+        )
       }
       path.stroke()
     }
   }
-  
-  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+
+  override func traitCollectionDidChange(
+    _ previousTraitCollection: UITraitCollection?
+  ) {
     setNeedsDisplay()
   }
 }

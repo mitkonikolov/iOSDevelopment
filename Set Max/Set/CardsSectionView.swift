@@ -9,27 +9,28 @@
 import UIKit
 
 class CardsSectionView: UIView {
-  
-  private let subviewAspectRatio:CGFloat = 3/5;
-  
-  var numberOfSubviews:Int {
+
+  private let subviewAspectRatio: CGFloat = 3/5;
+
+  var numberOfSubviews: Int {
     return subviews.count
   }
-  
+
   var objectsOnTheGrid = 0
-  
+
   var grid: Grid {
     var grid = Grid(
       layout: Grid.Layout.aspectRatio(subviewAspectRatio),
-      frame: self.bounds)
+      frame: self.bounds
+    )
     grid.cellCount = objectsOnTheGrid
     return grid
   }
-  
+
   override func draw(_ rect: CGRect) {
     self.setNeedsLayout()
   }
-  
+
   override func layoutSubviews() {
     for viewNumber in 0..<numberOfSubviews {
       if let cardPos = grid[viewNumber] {
@@ -41,7 +42,8 @@ class CardsSectionView: UIView {
             top: verticalChange,
             left: horizontalChange,
             bottom: verticalChange,
-            right: horizontalChange)
+            right: horizontalChange
+          )
         )
         view.frame = newPos
         view.setNeedsDisplay()
@@ -49,7 +51,7 @@ class CardsSectionView: UIView {
       }
     }
   }
-  
+
   override func viewWithTag(_ tag: Int) -> UIView? {
     for subview in subviews {
       if subview.tag == tag {

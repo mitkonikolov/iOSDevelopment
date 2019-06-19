@@ -9,7 +9,7 @@
 import Foundation
 
 enum Property: Int, CaseIterable {
-    case one = 1
-    case two
-    case three
+  case one = 1
+  case two
+  case three
 }

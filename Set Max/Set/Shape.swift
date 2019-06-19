@@ -8,9 +8,8 @@
 
 import Foundation
 
-
-enum Shape:Int {
-    case square = 1
-    case circle
-    case triangle
+enum Shape: Int {
+  case square = 1
+  case circle
+  case triangle
 }

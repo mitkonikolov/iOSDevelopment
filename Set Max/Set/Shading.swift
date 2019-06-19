@@ -9,7 +9,7 @@
 import Foundation
 
 enum Shading: Int {
-    case full = 1
-    case outlined
-    case striped
+  case full = 1
+  case outlined
+  case striped
 }
