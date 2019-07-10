@@ -48,12 +48,6 @@ class ContainerView: UIView {
     }
   }
 
-  override func layoutSubviews() {
-    subviews.forEach { view in
-      view.setNeedsLayout()
-    }
-  }
-
   func removeAllSubviews() {
     subviews.forEach { view in
       view.removeFromSuperview()
@@ -62,9 +56,10 @@ class ContainerView: UIView {
 
   private func setConstraintsFor(_ view: UIView) {
     let margins = self.layoutMarginsGuide
-    setDefaultConstraints(view)
     switch view {
     case is MatchedCardsSectionView:
+      setDefaultConstraints(view)
+
       setConstraints(
         forMatchedOrButtonSection: view,
         maxProportionalHeight: matchedMaxProportionalHeight,
@@ -76,13 +71,20 @@ class ContainerView: UIView {
       )
       sendSubviewToBack(view)
     case is CardsSectionView:
+      // to prevent multiple layouts later, unsuccessfully try to layout now before actually setting the bounds
+      view.layoutIfNeeded()
+      view.translatesAutoresizingMaskIntoConstraints = false
       NSLayoutConstraint.activate(
         [
           view.topAnchor.constraint(equalTo: margins.topAnchor),
           view.bottomAnchor.constraint(equalTo: labelSection!.topAnchor),
+          view.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+          view.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
+          view.centerXAnchor.constraint(equalTo: margins.centerXAnchor),
         ]
       )
     case is ButtonsSectionView:
+      setDefaultConstraints(view)
       setConstraints(
         forMatchedOrButtonSection: view,
         maxProportionalHeight: buttonsMaxProportionalHeight,
@@ -93,6 +95,7 @@ class ContainerView: UIView {
         minHeight: buttonsAbsHeightMin
       )
     case is UILabel:
+      setDefaultConstraints(view)
       setConstraints(
         forMatchedOrButtonSection: view,
         maxProportionalHeight: buttonsMaxProportionalHeight,

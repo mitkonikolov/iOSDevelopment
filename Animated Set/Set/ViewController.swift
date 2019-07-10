@@ -156,16 +156,20 @@ class ViewController: UIViewController {
   @objc private func newGame(_ sender: UIButton) {
     game = Set()
     containerView.removeAllSubviews()
-    setUpScoreLabel()
-    setUpCardsSection()
-    setUpButtonsSection()
-    setUpMatchedSection()
+    cardsSectionView = CardsSectionView()
+    buttonsSectionView = ButtonsSectionView()
+    matchedSectionView = MatchedCardsSectionView()
+    
     addAllSectionsToContainerView()
-    containerView.setNeedsLayout()
+    
+    setUpScoreLabel()
+    setUpButtonsSection()
+    setUpCardsSection()
+    setUpMatchedSection()
+    
   }
 
   private func setUpCardsSection() {
-    cardsSectionView = CardsSectionView()
     cardsSectionView!.contentMode = .redraw
     cardsSectionView!.tag = Int.max
 
@@ -177,13 +181,11 @@ class ViewController: UIViewController {
   }
 
   private func setUpButtonsSection() {
-    buttonsSectionView = ButtonsSectionView()
     buttonsSectionView!.contentMode = .redraw
     addButtonsToButtonsSectionView()
   }
 
   private func setUpMatchedSection() {
-    matchedSectionView = MatchedCardsSectionView()
     matchedSectionView!.contentMode = .redraw
     matchedSectionView!.objectsOnTheGrid = numberOfCardsToMakeAMatch
   }
@@ -215,7 +217,6 @@ class ViewController: UIViewController {
   }
 
   func addButtonsToButtonsSectionView() {
-    //    buttonsSectionView!.addLabelSubview(scoreLabel)
     buttonsSectionView!.addButtonSubview(dealThreeCardsButton)
     buttonsSectionView!.addButtonSubview(newGameButton)
   }
@@ -249,7 +250,7 @@ class ViewController: UIViewController {
       numSymbols: modelCard.number.rawValue,
       shading: shading,
       shapeColor: color,
-      faceUp: true
+      faceUp: false
     )
     getPlayingCardBorderColor(for: cardNumber, withView: setCard)
     // add the tap recognizer to the view

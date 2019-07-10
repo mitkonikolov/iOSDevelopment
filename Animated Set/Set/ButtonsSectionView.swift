@@ -30,14 +30,9 @@ class ButtonsSectionView: UIView {
       newGameButton = buttonView
     } else {
       dealCardsButton = buttonView
+      dealCardsButton!.backgroundColor = .brown
     }
     addSubview(buttonView)
-  }
-
-  override func layoutSubviews() {
-    subviews.forEach { view in
-      view.setNeedsDisplay()
-    }
   }
 
   private func setLayoutConstraints() {
@@ -65,9 +60,8 @@ class ButtonsSectionView: UIView {
         newGameButton!.widthAnchor.constraint(
           lessThanOrEqualTo: margins.widthAnchor,
           multiplier: newGameMaxProportionalWidth
-        ),
+        )
       ]
     )
-
   }
 }

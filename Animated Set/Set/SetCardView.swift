@@ -43,7 +43,7 @@ class SetCardView: UIView {
   }
 
   @IBInspectable
-  private var faceUp: Bool = true {
+  public var faceUp: Bool = true {
     didSet {
       setNeedsDisplay()
       setNeedsLayout()
@@ -140,17 +140,18 @@ class SetCardView: UIView {
 
   // draw subviews
   override func layoutSubviews() {
-    for valueSubview in valuesViews {
-      valueSubview.removeFromSuperview()
-    }
-    valuesViews = createCardValueViews()
-    super.layoutSubviews()
-    for viewNumber in 0..<numberSymbols {
-      valuesViews[viewNumber].frame.origin = CGPoint(
-        x: ((bounds.midX)-(subviewSide/2)),
-        y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio)
-          + firstSubviewYCoordinate
-      )
+    if faceUp {
+      for valueSubview in valuesViews {
+        valueSubview.removeFromSuperview()
+      }
+      valuesViews = createCardValueViews()
+      for viewNumber in 0..<numberSymbols {
+        valuesViews[viewNumber].frame.origin = CGPoint(
+          x: ((bounds.midX)-(subviewSide/2)),
+          y: (CGFloat(viewNumber) * subviewSide * subviewSideSpacingRatio)
+            + firstSubviewYCoordinate
+        )
+      }
     }
   }
 
@@ -162,17 +163,24 @@ class SetCardView: UIView {
       cornerRadius: cornerRadius
     )
     roundedRect.addClip()
-    cardBodyColor.setFill()
-    roundedRect.fill()
-    cardOutlineColor.setStroke()
-    roundedRect.lineWidth = outlineStrokeWidth
-    switch state {
-    case .highlighted: highlightedColor.setStroke()
-    case .matchSuccessful: successfulMatchColor.setStroke()
-    case .matchFailed: failedMatchColor.setStroke()
-    default: break
+    
+    if faceUp {
+      cardBodyColor.setFill()
+      roundedRect.fill()
+      cardOutlineColor.setStroke()
+      roundedRect.lineWidth = outlineStrokeWidth
+      switch state {
+      case .highlighted: highlightedColor.setStroke()
+      case .matchSuccessful: successfulMatchColor.setStroke()
+      case .matchFailed: failedMatchColor.setStroke()
+      default: break
+      }
+      roundedRect.stroke()
     }
-    roundedRect.stroke()
+    else {
+      UIColor.brown.setFill()
+      roundedRect.fill()
+    }
   }
 
 }
