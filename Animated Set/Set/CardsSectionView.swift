@@ -116,7 +116,7 @@ class CardsSectionView: UIView {
       if animation == animations.count-1 {
         animations[animation].addCompletion({ [unowned self] _ in
           self.dealingCardsAnimationState = .stopped
-          //self.setNeedsLayout()
+          self.setNeedsLayout()
         })
       }
       else {
@@ -130,7 +130,7 @@ class CardsSectionView: UIView {
   private func animateMovingCard(card view: UIView, _ newFrame: CGRect) -> UIViewPropertyAnimator {
     let setCard = view as! SetCardView
     let propertyAnimator = UIViewPropertyAnimator(
-      duration: 0.4,
+      duration: 0.35,
       curve: .easeOut,
       animations: {
         setCard.frame = newFrame
@@ -140,7 +140,7 @@ class CardsSectionView: UIView {
       if !setCard.faceUp {
         UIView.transition(
           with: setCard,
-          duration: 0.4,
+          duration: 0.2,
           options: [.transitionFlipFromLeft],
           animations: {
             setCard.faceUp = true
