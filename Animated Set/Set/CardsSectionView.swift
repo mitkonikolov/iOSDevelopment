@@ -21,6 +21,11 @@ class CardsSectionView: UIView {
   
   private var animations:[UIViewPropertyAnimator] = []
   
+  private let adjustingAnimator = UIViewPropertyAnimator(
+    duration: 0.5,
+    curve: .linear,
+    animations: {})
+  
   private var dealingCardsAnimationState = UIViewAnimatingState.inactive
 
   var grid: Grid {
@@ -55,6 +60,7 @@ class CardsSectionView: UIView {
     if dealingCardsAnimationState == .inactive {
       setAnimationOrder()
       animations[0].startAnimation()
+      adjustingAnimator.startAnimation()
       dealingCardsAnimationState = .active
     }
 
@@ -67,6 +73,7 @@ class CardsSectionView: UIView {
         if !card.faceUp && dealingCardsAnimationState == .stopped {
           animations = []
           dealingCardsAnimationState = .inactive
+          
           return
         }
       }
@@ -88,7 +95,16 @@ class CardsSectionView: UIView {
   private func changeFrameFor(_ view: UIView, _ newFrame: CGRect) {
     // the first display of the cards, so they are animated
     if dealingCardsAnimationState == .inactive {
-      animations.append(animateMovingCard(card: view, newFrame))
+      if let card = view as? SetCardView {
+        if card.faceUp {
+          adjustingAnimator.addAnimations {
+            card.frame = newFrame
+          }
+        }
+        else {
+          animations.append(animateMovingCard(card: view, newFrame))
+        }
+      }
     }
     else if dealingCardsAnimationState == .stopped {
       view.frame = newFrame
