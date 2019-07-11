@@ -140,10 +140,10 @@ class SetCardView: UIView {
 
   // draw subviews
   override func layoutSubviews() {
+    for valueSubview in valuesViews {
+      valueSubview.removeFromSuperview()
+    }
     if faceUp {
-      for valueSubview in valuesViews {
-        valueSubview.removeFromSuperview()
-      }
       valuesViews = createCardValueViews()
       for viewNumber in 0..<numberSymbols {
         valuesViews[viewNumber].frame.origin = CGPoint(

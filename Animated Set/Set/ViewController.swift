@@ -66,7 +66,7 @@ class ViewController: UIViewController {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
       // selecting any card other than one from the matched section
-      resetMatchedSection()
+//      resetMatchedSection()
 
       // less than 3 cards and deselecting one of them
       if game.selectedCardsIndices.count < 3
@@ -319,7 +319,7 @@ class ViewController: UIViewController {
   /// It assumes that within the model, the deck is still not empty and
   /// therefore there are new cards at the same indices of the old matched
   /// cards. It should not be called if the deck is full and cards will be
-  /// removed.
+  /// removed. It sets the card to be face down so the card is "dealt" again.
   ///
   /// - Parameter matchedViewsTags: tags of setCardViews forming a match
   private func updateMatchedCardsViewsWithNewFaces(_ matchedViewsTags: [Int]) {
@@ -332,7 +332,7 @@ class ViewController: UIViewController {
         numberOfSymbols: modelCard.number.rawValue,
         shading: getShadingFrom(property: modelCard.shading),
         color: getColorFrom(property: modelCard.color),
-        faceUp: true
+        faceUp: false
       )
     }
   }
@@ -344,6 +344,8 @@ class ViewController: UIViewController {
         frame: CGRect(x: 0, y: 0, width: 0, height: 0),
         cardNumber: cardTagAndNumber
       )
+      // set the card to be face up
+      cardView.faceUp = true
       // invert the tag so matched cards have negative tags - 1
       // 0 -> -1
       // 1 -> -2
@@ -409,6 +411,8 @@ class ViewController: UIViewController {
       removeMatchedViewsAndUpdateAllViewsTags(matchingCardsIndices)
     } else {
       updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
+      matchedSectionView?.layoutIfNeeded()
+      cardsSectionView?.setNeedsLayout()
     }
   }
 
