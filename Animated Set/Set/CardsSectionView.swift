@@ -39,7 +39,7 @@ class CardsSectionView: UIView {
   
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
-    view.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
+//    view.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
   }
 
   override func layoutSubviews() {
@@ -102,6 +102,7 @@ class CardsSectionView: UIView {
           }
         }
         else {
+          card.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
           animations.append(animateMovingCard(card: view, newFrame))
         }
       }
