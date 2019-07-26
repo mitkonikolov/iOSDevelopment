@@ -11,14 +11,26 @@ import UIKit
 class MatchedCardsSectionView: CardsSectionView {
 
   private let animator = UIViewPropertyAnimator(
-    duration: 0.5,
+    duration: constants.propertyAnimationDuration,
     curve: .linear,
     animations: {}
   )
   
-  private let fadeOutAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .linear, animations: {})
+  struct constants {
+    static let propertyAnimationDuration = 0.5
+    static let cardSizeDecrease:CGFloat = 0.08
+    static let sendToPileAnimationDuration = 0.3
+    static let sendToPileAnimationDelay = Double(1)
+    static let freeSpaceRatio = CGFloat(2)
+  }
   
   private var animationFinished = false
+  
+  private var matchPilePoint: CGPoint?
+  
+  public func setMatchPileFrame(_ frame: CGRect) {
+    matchPilePoint = frame.origin
+  }
   
   func removeAllSubviews() {
     subviews.forEach { subview in
@@ -32,11 +44,9 @@ class MatchedCardsSectionView: CardsSectionView {
   }
 
   override func layoutSubviews() {
-    
     if animationFinished {
       return
     }
-    
 
     let freeSpaceToAdd = calculateFreeSpaceToAdd()
     
@@ -60,14 +70,14 @@ class MatchedCardsSectionView: CardsSectionView {
     if numberOfSubviews > 0 {
       let lastCardPos = grid[numberOfSubviews-1]
       let freeSpace = bounds.width - lastCardPos!.maxX
-      freeSpaceToAdd = freeSpace/2
+      freeSpaceToAdd = freeSpace/constants.freeSpaceRatio
     }
     return freeSpaceToAdd
   }
   
   private func newPositionFrom(_ cardPos: CGRect, _ freeSpaceToAdd: CGFloat) -> CGRect {
-    let verticalChange = cardPos.height*0.08
-    let horizontalChange = cardPos.width*0.08
+    let verticalChange = cardPos.height * constants.cardSizeDecrease
+    let horizontalChange = cardPos.width * constants.cardSizeDecrease
     return cardPos.inset(
       by: UIEdgeInsets.init(
         top: verticalChange,
@@ -89,26 +99,21 @@ class MatchedCardsSectionView: CardsSectionView {
     })
   }
   
-  private func sendMatchedToPile(_ view: UIView) -> Timer {
-    return Timer.scheduledTimer(
-      withTimeInterval: 1,
-      repeats: false,
-      block: { [unowned self] _ in
-        UIViewPropertyAnimator.runningPropertyAnimator(
-          withDuration: 0.3,
-          delay: 0,
-          options: [],
-          animations: {
-            view.frame.origin = CGPoint(x: 80, y: 380)
-          },
-          completion: { _ in
-//            view.frame.size = CGSize(width: 0, height: 0)
-            self.animationFinished = true
-            self.removeAllSubviews()
-            self.superview?.sendSubviewToBack(self)
-          }
-        )
-      }
+  private func sendMatchedToPile(_ view: UIView) -> UIViewPropertyAnimator {
+    return UIViewPropertyAnimator.runningPropertyAnimator(
+      withDuration: constants.sendToPileAnimationDuration,
+      delay: constants.sendToPileAnimationDelay,
+      options: [],
+      animations: { [unowned self] in
+        if self.matchPilePoint != nil {
+          view.frame.origin = self.matchPilePoint!
+        }
+    },
+      completion: { _ in
+        self.animationFinished = true
+        self.removeAllSubviews()
+        self.superview?.sendSubviewToBack(self)
+    }
     )
   }
 }

@@ -12,11 +12,11 @@ class ContainerView: UIView {
 
   // height constants for matched section
   // max height as sectionHeight/containerViewHeight
-  private let matchedMaxProportionalHeight: CGFloat = 0.4
+  let matchedMaxProportionalHeight: CGFloat = 0.4
   private let matchedAbsHeightMax: CGFloat = 400
   private let matchedAbsHeightMin: CGFloat = 100
   // height constants for buttons section
-  private let buttonsMaxProportionalHeight: CGFloat = 0.1
+  public let buttonsMaxProportionalHeight: CGFloat = 0.1
   private let buttonsAbsHeightMax: CGFloat = 50
   private let buttonsAbsHeightMin: CGFloat = 40
   // priority used for lower priority constraints

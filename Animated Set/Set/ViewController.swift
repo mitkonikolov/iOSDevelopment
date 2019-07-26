@@ -16,12 +16,37 @@ class ViewController: UIViewController {
   private let numberOfCardsToMakeAMatch = 3
   // 81 cards tagged 0..80
   private let highestPossibleTag = 80
+  
+  private let timeToPauseBeforeShowingMatchedPile = 1.85
 
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
   private var matchedSectionView: MatchedCardsSectionView?
 
   private let cardAspectRatio: CGFloat = 3/5;
+  
+  private var needToUpdateDealPileLocation = true
+  private var needToUpdateMatchPileLocation = true
+  
+  private var dealPileFrame: CGRect {
+    if containerView != nil && buttonsSectionView != nil {
+      let y = containerView.bounds.height *
+        (1 - (containerView.buttonsMaxProportionalHeight/2))
+      let x = containerView.bounds.width * (buttonsSectionView!.dealCardsMaxProportionalWidth/2)
+      return CGRect(x: x, y: y, width: 0, height: 0)
+    }
+    
+    return CGRect(x: 0, y: 0, width: 0, height: 0)
+  }
+  
+  private var matchPileFrame: CGRect {
+    let dealPile = dealPileFrame
+    return CGRect(
+      x: dealPile.origin.x * 2.7,
+      y: dealPile.origin.y * 0.55,
+      width: 0,
+      height: 0)
+  }
 
   private var numberOfCards: Int {
     return game.cardsPlaying.count
@@ -65,8 +90,6 @@ class ViewController: UIViewController {
   @objc private func selectCard(_ sender: UITapGestureRecognizer) {
     if let cardView = sender.view as? SetCardView {
       let cardNumber = cardView.tag
-      // selecting any card other than one from the matched section
-//      resetMatchedSection()
 
       // less than 3 cards and deselecting one of them
       if game.selectedCardsIndices.count < 3
@@ -79,8 +102,18 @@ class ViewController: UIViewController {
 
       // 3 cards have formed a match
       if game.selectedCardsFormAMatch {
+        if needToUpdateMatchPileLocation {
+          matchedSectionView?.setMatchPileFrame(matchPileFrame)
+          needToUpdateMatchPileLocation = false
+        }
         matchSuccessfulUpdateViews()
         containerView.bringMatchedToFront()
+        Timer.scheduledTimer(
+          withTimeInterval: timeToPauseBeforeShowingMatchedPile,
+          repeats: false,
+          block: { _ in
+          self.buttonsSectionView?.showMatchedPile()
+        })
       }
     }
     updateAllCardViewsBorderColors()
@@ -91,6 +124,10 @@ class ViewController: UIViewController {
   @objc private func dealThreeCards(_ sender: UITapGestureRecognizer) {
     if !game.deck.isEmpty {
       game.dealThreeCards()
+      if needToUpdateDealPileLocation {
+        cardsSectionView?.setDealPile(dealPileFrame)
+        needToUpdateDealPileLocation = false
+      }
       addCardsViewsToCardsSectionView()
       containerView.setNeedsLayout()
       containerView.setNeedsDisplay()
@@ -172,6 +209,7 @@ class ViewController: UIViewController {
   private func setUpCardsSection() {
     cardsSectionView!.contentMode = .redraw
     cardsSectionView!.tag = Int.max
+    cardsSectionView!.setDealPile(dealPileFrame)
 
     for _ in 0..<numberOfCardsToStart/numberOfCardsToDealAtOnce {
       game.dealThreeCards()
@@ -188,6 +226,7 @@ class ViewController: UIViewController {
   private func setUpMatchedSection() {
     matchedSectionView!.contentMode = .redraw
     matchedSectionView!.objectsOnTheGrid = numberOfCardsToMakeAMatch
+    matchedSectionView!.setMatchPileFrame(matchPileFrame)
   }
 
   private func addAllSectionsToContainerView() {
@@ -413,6 +452,16 @@ class ViewController: UIViewController {
       updateMatchedCardsViewsWithNewFaces(matchingCardsIndices)
       matchedSectionView?.layoutIfNeeded()
       cardsSectionView?.setNeedsLayout()
+    }
+  }
+  
+  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator)
+    if needToUpdateDealPileLocation == false {
+      needToUpdateDealPileLocation = true
+    }
+    if needToUpdateMatchPileLocation == false {
+      needToUpdateMatchPileLocation = true
     }
   }
 

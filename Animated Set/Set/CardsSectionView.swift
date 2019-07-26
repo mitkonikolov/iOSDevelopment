@@ -19,7 +19,13 @@ class CardsSectionView: UIView {
 
   var objectsOnTheGrid = 0
   
+  private var dealPileFrame: CGRect?
+  
   private var animations:[UIViewPropertyAnimator] = []
+  
+  public func setDealPile(_ frame: CGRect) {
+    dealPileFrame = frame
+  }
   
   private let adjustingAnimator = UIViewPropertyAnimator(
     duration: 0.5,
@@ -39,7 +45,6 @@ class CardsSectionView: UIView {
   
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
-//    view.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
   }
 
   override func layoutSubviews() {
@@ -102,7 +107,10 @@ class CardsSectionView: UIView {
           }
         }
         else {
-          card.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
+//          card.frame = CGRect(x: 70, y: 785, width: 0, height: 0)
+          if dealPileFrame != nil {
+            card.frame = dealPileFrame!
+          }
           animations.append(animateMovingCard(card: view, newFrame))
         }
       }

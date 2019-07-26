@@ -12,15 +12,20 @@ class ButtonsSectionView: UIView {
 
   private var dealCardsButton: UIButton?
   private var newGameButton: UIButton?
+  private let matchedCardsPile = UIButton()
 
-  private let dealCardsMaxProportionalWidth: CGFloat = 0.5
-  private let newGameMaxProportionalWidth: CGFloat = 0.5
+  let dealCardsMaxProportionalWidth: CGFloat = 0.32
+  private let matchedCardsPileMaxProportionalWidth: CGFloat = 0.32
+  private let newGameMaxProportionalWidth: CGFloat = 0.32
 
   private let expectedSubviews = 2
 
   override func addSubview(_ view: UIView) {
     super.addSubview(view)
     if subviews.count == expectedSubviews {
+      super.addSubview(matchedCardsPile)
+      matchedCardsPile.backgroundColor = .brown
+      matchedCardsPile.isHidden = true
       setLayoutConstraints()
     }
   }
@@ -33,6 +38,10 @@ class ButtonsSectionView: UIView {
       dealCardsButton!.backgroundColor = .brown
     }
     addSubview(buttonView)
+  }
+  
+  public func showMatchedPile() {
+    matchedCardsPile.isHidden = false
   }
 
   private func setLayoutConstraints() {
@@ -51,11 +60,16 @@ class ButtonsSectionView: UIView {
           lessThanOrEqualTo: margins.widthAnchor,
           multiplier: dealCardsMaxProportionalWidth
         ),
+        matchedCardsPile.leadingAnchor.constraint(
+          equalTo: dealCardsButton!.trailingAnchor),
+        matchedCardsPile.widthAnchor.constraint(
+          lessThanOrEqualTo: margins.widthAnchor,
+          multiplier: matchedCardsPileMaxProportionalWidth),
         newGameButton!.trailingAnchor.constraint(
           equalTo: margins.trailingAnchor
         ),
         newGameButton!.leadingAnchor.constraint(
-          equalTo: dealCardsButton!.trailingAnchor
+          equalTo: matchedCardsPile.trailingAnchor
         ),
         newGameButton!.widthAnchor.constraint(
           lessThanOrEqualTo: margins.widthAnchor,
