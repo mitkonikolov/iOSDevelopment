@@ -22,14 +22,42 @@ class MatchedCardsSectionView: CardsSectionView {
     animations: {}
   )
   
+  private lazy var dynamicAnimator = UIDynamicAnimator(referenceView: self.superview!)
+  
+  private var collisionBehavior: UICollisionBehavior {
+    let behavior = UICollisionBehavior()
+    behavior.translatesReferenceBoundsIntoBoundary = true
+    dynamicAnimator.addBehavior(behavior)
+    return behavior
+  }
+  
+  private var dynamicBehavior: UIDynamicItemBehavior {
+    let behavior = UIDynamicItemBehavior()
+    behavior.allowsRotation = false
+    behavior.elasticity = constants.collisionElasticity
+    behavior.friction = constants.collisionFriction
+    dynamicAnimator.addBehavior(behavior)
+    return behavior
+  }
+  
+  static var pushAngle: CGFloat {
+    return 2*CGFloat.pi * CGFloat.random(in: 0.1 ... 1)
+  }
+  
+  static var pushMagnitude:CGFloat {
+    return CGFloat(1) * CGFloat.random(in: 2.1 ... 10.1)
+  }
+  
   struct constants {
     static let propertyAnimationDuration = 0.83
     static let cardSizeDecrease:CGFloat = 0.08
     static let sendToPileAnimationDuration = 0.62
-    static let sendToPileAnimationDelay = Double(1)
+    static let bouncingBehaviorDuration = 1.3
     static let freeSpaceRatio = CGFloat(2)
     static let preMatchRenderScale = CGFloat(0.25)
     static let postMatchRenderScale = CGFloat(0.35)
+    static let collisionElasticity = CGFloat(1)
+    static let collisionFriction = CGFloat(0)
   }
   
   private var animationFinished = false
@@ -68,11 +96,18 @@ class MatchedCardsSectionView: CardsSectionView {
         let newPos = newPositionFrom(cardPos, freeSpaceToAdd)
         animateMatch(view, newPos)
         animateFold(view)
+        addToBehaviors(view)
       }
     }
     
     animator.startAnimation()
-    fadingOutAnimator.startAnimation(afterDelay: animator.duration)
+    Timer.scheduledTimer(
+      withTimeInterval: animator.duration + constants.bouncingBehaviorDuration,
+      repeats: false,
+      block: { _ in
+        self.dynamicAnimator.removeAllBehaviors()
+        self.fadingOutAnimator.startAnimation()
+      })
   }
   
   private func calculateFreeSpaceToAdd() -> CGFloat {
@@ -112,9 +147,6 @@ class MatchedCardsSectionView: CardsSectionView {
     fadingOutAnimator.addAnimations {
       if self.matchPilePoint != nil {
         view.frame.origin = self.matchPilePoint!
-        view.transform = CGAffineTransform.identity.scaledBy(
-          x: constants.postMatchRenderScale,
-          y: constants.postMatchRenderScale)
       }
     }
     fadingOutAnimator.addCompletion({ _ in
@@ -122,5 +154,17 @@ class MatchedCardsSectionView: CardsSectionView {
       self.removeAllSubviews()
       self.superview?.sendSubviewToBack(self)
     })
+  }
+  
+  private func addToBehaviors(_ view: UIView) {
+    collisionBehavior.addItem(view)
+    dynamicBehavior.addItem(view)
+    let push = UIPushBehavior(items: [view], mode: .instantaneous)
+    push.angle = MatchedCardsSectionView.pushAngle
+    push.magnitude = MatchedCardsSectionView.pushMagnitude
+    push.action = { [unowned push] in
+      push.dynamicAnimator?.removeBehavior(push)
+    }
+    dynamicAnimator.addBehavior(push)
   }
 }

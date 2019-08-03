@@ -17,7 +17,7 @@ class ViewController: UIViewController {
   // 81 cards tagged 0..80
   private let highestPossibleTag = 80
   
-  private let timeToPauseBeforeShowingMatchedPile = 1.48
+  private let timeToPauseBeforeShowingMatchedPile = MatchedCardsSectionView.constants.bouncingBehaviorDuration + MatchedCardsSectionView.constants.propertyAnimationDuration + MatchedCardsSectionView.constants.sendToPileAnimationDuration
 
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
@@ -64,7 +64,7 @@ class ViewController: UIViewController {
       target: self,
       action: #selector(dealThreeCards)
     )
-    dealCards.setTitle("Deal \(numberOfCardsToDealAtOnce) Cards", for: .normal)
+    dealCards.setTitle("Deck", for: .normal)
     dealCards.setTitleColor(.black, for: .normal)
     dealCards.addGestureRecognizer(tap)
     dealCards.titleLabel!.font = UIFont.preferredFont(forTextStyle: .body)
