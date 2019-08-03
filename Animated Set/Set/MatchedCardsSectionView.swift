@@ -16,10 +16,16 @@ class MatchedCardsSectionView: CardsSectionView {
     animations: {}
   )
   
+  private let fadingOutAnimator = UIViewPropertyAnimator(
+    duration: constants.sendToPileAnimationDuration,
+    curve: .linear,
+    animations: {}
+  )
+  
   struct constants {
-    static let propertyAnimationDuration = 0.5
+    static let propertyAnimationDuration = 0.93
     static let cardSizeDecrease:CGFloat = 0.08
-    static let sendToPileAnimationDuration = 0.3
+    static let sendToPileAnimationDuration = 0.92
     static let sendToPileAnimationDelay = Double(1)
     static let freeSpaceRatio = CGFloat(2)
   }
@@ -59,10 +65,12 @@ class MatchedCardsSectionView: CardsSectionView {
         let view = self.subviews[viewNumber]
         let newPos = newPositionFrom(cardPos, freeSpaceToAdd)
         animateMatch(view, newPos)
+        animateFold(view)
       }
     }
     
     animator.startAnimation()
+    fadingOutAnimator.startAnimation(afterDelay: animator.duration)
   }
   
   private func calculateFreeSpaceToAdd() -> CGFloat {
@@ -89,31 +97,79 @@ class MatchedCardsSectionView: CardsSectionView {
   }
   
   private func animateMatch(_ view: UIView, _ newPos: CGRect) {
+//    view.alpha = 0
     view.frame = newPos
-    view.transform = CGAffineTransform(scaleX: 0, y: 0)
+    view.transform = CGAffineTransform.identity.scaledBy(x: 0.5, y: 0.5)
     animator.addAnimations {
-      view.transform = CGAffineTransform.identity
+      view.transform = CGAffineTransform.identity.scaledBy(x: 1, y: 1)
+//      view.transform = CGAffineTransform.identity
     }
-    animator.addCompletion({ [unowned self] _ in
-      self.sendMatchedToPile(view)
-    })
+//    animator.addCompletion { (position) in
+//      self.fadingOutAnimator.startAnimation()
+//    }
+    
+    
+//    animator.addCompletion { (position) in
+//      UIViewPropertyAnimator.runningPropertyAnimator(
+//        withDuration: 0.8,
+//        delay: 0,
+//        options: [],
+//        animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1)})
+//    }
+    
+//    UIViewPropertyAnimator.runningPropertyAnimator(
+//      withDuration: 0.8,
+//      delay: 0,
+//      options: [],
+//      animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)},
+//      completion: {position in
+//        UIViewPropertyAnimator.runningPropertyAnimator(
+//          withDuration: 0.8,
+//          delay: 0,
+//          options: [],
+//          animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)})
+//    })
+    
+    
+    
+    
+//    animator.addAnimations {
+//      //      view.alpha = 1
+//      view.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)
+//    }
+//    animator.addCompletion( { _ in
+//      UIViewPropertyAnimator.runningPropertyAnimator(
+//        withDuration: 0.8,
+//        delay: 0,
+//        options: [],
+//        animations: {
+//        view.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1)
+//        })
+//    })
+
+//    animator.addCompletion({ [unowned self] _ in
+//      self.fadingOutAnimator.startAnimation(afterDelay: constants.sendToPileAnimationDelay)
+//    })
   }
   
-  private func sendMatchedToPile(_ view: UIView) -> UIViewPropertyAnimator {
-    return UIViewPropertyAnimator.runningPropertyAnimator(
-      withDuration: constants.sendToPileAnimationDuration,
-      delay: constants.sendToPileAnimationDelay,
-      options: [],
-      animations: { [unowned self] in
-        if self.matchPilePoint != nil {
-          view.frame.origin = self.matchPilePoint!
-        }
-    },
-      completion: { _ in
-        self.animationFinished = true
-        self.removeAllSubviews()
-        self.superview?.sendSubviewToBack(self)
+  private func animateFold(_ view:UIView) {
+    fadingOutAnimator.addAnimations {
+      if self.matchPilePoint != nil {
+        view.frame.origin = self.matchPilePoint!
+        view.transform = CGAffineTransform.identity.scaledBy(x: 0.4, y: 0.4)
+      }
     }
-    )
+    fadingOutAnimator.addCompletion({ _ in
+      self.animationFinished = true;
+      self.removeAllSubviews()
+      self.superview?.sendSubviewToBack(self)
+    })
+    
+//    fadingOutAnimator.addCompletion( { _ in
+//        self.animationFinished = true
+//        self.removeAllSubviews()
+//        self.superview?.sendSubviewToBack(self)
+//      }
+//    )
   }
 }
