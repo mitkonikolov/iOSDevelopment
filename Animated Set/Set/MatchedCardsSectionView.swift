@@ -23,11 +23,13 @@ class MatchedCardsSectionView: CardsSectionView {
   )
   
   struct constants {
-    static let propertyAnimationDuration = 0.93
+    static let propertyAnimationDuration = 0.83
     static let cardSizeDecrease:CGFloat = 0.08
-    static let sendToPileAnimationDuration = 0.92
+    static let sendToPileAnimationDuration = 0.62
     static let sendToPileAnimationDelay = Double(1)
     static let freeSpaceRatio = CGFloat(2)
+    static let preMatchRenderScale = CGFloat(0.25)
+    static let postMatchRenderScale = CGFloat(0.35)
   }
   
   private var animationFinished = false
@@ -97,66 +99,22 @@ class MatchedCardsSectionView: CardsSectionView {
   }
   
   private func animateMatch(_ view: UIView, _ newPos: CGRect) {
-//    view.alpha = 0
     view.frame = newPos
-    view.transform = CGAffineTransform.identity.scaledBy(x: 0.5, y: 0.5)
+    view.transform = CGAffineTransform.identity.scaledBy(
+      x: constants.preMatchRenderScale,
+      y: constants.preMatchRenderScale)
     animator.addAnimations {
-      view.transform = CGAffineTransform.identity.scaledBy(x: 1, y: 1)
-//      view.transform = CGAffineTransform.identity
+      view.transform = CGAffineTransform.identity
     }
-//    animator.addCompletion { (position) in
-//      self.fadingOutAnimator.startAnimation()
-//    }
-    
-    
-//    animator.addCompletion { (position) in
-//      UIViewPropertyAnimator.runningPropertyAnimator(
-//        withDuration: 0.8,
-//        delay: 0,
-//        options: [],
-//        animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1)})
-//    }
-    
-//    UIViewPropertyAnimator.runningPropertyAnimator(
-//      withDuration: 0.8,
-//      delay: 0,
-//      options: [],
-//      animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)},
-//      completion: {position in
-//        UIViewPropertyAnimator.runningPropertyAnimator(
-//          withDuration: 0.8,
-//          delay: 0,
-//          options: [],
-//          animations: {view.transform = CGAffineTransform.identity.scaledBy(x: 0.9, y: 0.9)})
-//    })
-    
-    
-    
-    
-//    animator.addAnimations {
-//      //      view.alpha = 1
-//      view.transform = CGAffineTransform.identity.scaledBy(x: 3, y: 3)
-//    }
-//    animator.addCompletion( { _ in
-//      UIViewPropertyAnimator.runningPropertyAnimator(
-//        withDuration: 0.8,
-//        delay: 0,
-//        options: [],
-//        animations: {
-//        view.transform = CGAffineTransform.identity.scaledBy(x: 0.1, y: 0.1)
-//        })
-//    })
-
-//    animator.addCompletion({ [unowned self] _ in
-//      self.fadingOutAnimator.startAnimation(afterDelay: constants.sendToPileAnimationDelay)
-//    })
   }
   
   private func animateFold(_ view:UIView) {
     fadingOutAnimator.addAnimations {
       if self.matchPilePoint != nil {
         view.frame.origin = self.matchPilePoint!
-        view.transform = CGAffineTransform.identity.scaledBy(x: 0.4, y: 0.4)
+        view.transform = CGAffineTransform.identity.scaledBy(
+          x: constants.postMatchRenderScale,
+          y: constants.postMatchRenderScale)
       }
     }
     fadingOutAnimator.addCompletion({ _ in
@@ -164,12 +122,5 @@ class MatchedCardsSectionView: CardsSectionView {
       self.removeAllSubviews()
       self.superview?.sendSubviewToBack(self)
     })
-    
-//    fadingOutAnimator.addCompletion( { _ in
-//        self.animationFinished = true
-//        self.removeAllSubviews()
-//        self.superview?.sendSubviewToBack(self)
-//      }
-//    )
   }
 }

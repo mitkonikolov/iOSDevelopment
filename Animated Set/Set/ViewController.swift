@@ -17,7 +17,7 @@ class ViewController: UIViewController {
   // 81 cards tagged 0..80
   private let highestPossibleTag = 80
   
-  private let timeToPauseBeforeShowingMatchedPile = 1.85
+  private let timeToPauseBeforeShowingMatchedPile = 1.48
 
   private var cardsSectionView: CardsSectionView?
   private var buttonsSectionView: ButtonsSectionView?
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     if containerView != nil && buttonsSectionView != nil {
       let y = containerView.bounds.height *
         (1 - (containerView.buttonsMaxProportionalHeight/2))
-      let x = containerView.bounds.width * (buttonsSectionView!.dealCardsMaxProportionalWidth/2)
+      let x = containerView.bounds.width * (buttonsSectionView!.dealCardsMaxProportionalWidth/2.3)
       return CGRect(x: x, y: y, width: 0, height: 0)
     }
     
