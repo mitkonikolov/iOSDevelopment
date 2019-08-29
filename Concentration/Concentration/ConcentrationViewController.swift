@@ -40,7 +40,6 @@ class ConcentrationViewController: UIViewController {
     }
     
     @IBAction private func newGame(_ sender: UIButton) {
-        emojiChoices = emojiThemes[emojiThemes.count.arc4random]
         let theme = colorSchemes[colorSchemes.count.arc4random]
         // reset the association between cards and emojis
         emoji = [Card:String]()
@@ -69,7 +68,7 @@ class ConcentrationViewController: UIViewController {
         }
     }
     
-    private lazy var emojiChoices = emojiThemes[emojiThemes.count.arc4random]
+    public var emojiChoices: [String] = []
     
     // association of button IDs and emojis
     private var emoji = [Card:String]()
