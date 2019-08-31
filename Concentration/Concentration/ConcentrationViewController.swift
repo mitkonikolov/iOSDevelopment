@@ -68,7 +68,7 @@ class ConcentrationViewController: UIViewController {
         }
     }
     
-    public var emojiChoices: [String] = []
+  public var emojiChoices: [String] = []
     
     // association of button IDs and emojis
     private var emoji = [Card:String]()

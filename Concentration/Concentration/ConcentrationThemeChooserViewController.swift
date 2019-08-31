@@ -18,7 +18,11 @@ class ConcentrationThemeChooserViewController: UIViewController {
     "Foods": ["🍉", "🥑", "🍅", "🍊", "🍋", "🍏", "🌽", "🥕", "🥔", "🥦", "🥥","🍍"],
     "Vehicles": ["🚗", "🚌", "🚎", "🏎", "🚓", "✈️", "🛳", "🚁", "🚀", "🚅", "🚃","⛵️"]]
   
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+  @IBAction func changeTheme(_ sender: Any) {
+    performSegue(withIdentifier: "Choose Theme", sender: sender)
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
       if let themeName = (sender as? UIButton)?.currentTitle, let theme = emojiThemes[themeName] {
