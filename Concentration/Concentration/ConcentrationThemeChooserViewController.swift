@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConcentrationThemeChooserViewController: UIViewController {    
+class ConcentrationThemeChooserViewController: UIViewController, UISplitViewControllerDelegate {
 
   private let emojiThemes = [
     "Halloween": ["🎃", "😈", "💀", "🧟‍♀️", "🧛‍♂️", "🍭", "🍬", "👻", "☠️", "👽"],
@@ -17,6 +17,19 @@ class ConcentrationThemeChooserViewController: UIViewController {
     "Sports": ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🥊", "🏓", "🏐", "🏒", "🎱", "🏸","⛸"],
     "Foods": ["🍉", "🥑", "🍅", "🍊", "🍋", "🍏", "🌽", "🥕", "🥔", "🥦", "🥥","🍍"],
     "Vehicles": ["🚗", "🚌", "🚎", "🏎", "🚓", "✈️", "🛳", "🚁", "🚀", "🚅", "🚃","⛵️"]]
+  
+  override func awakeFromNib() {
+    splitViewController?.delegate = self
+  }
+  
+  func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+    if let cvc = secondaryViewController as? ConcentrationViewController {
+      if cvc.emojiChoices.count == 0 {
+        return true
+      }
+    }
+    return false
+  }
   
   @IBAction func changeTheme(_ sender: Any) {
     if let cvc = splitViewDetailConcentrationViewController {
