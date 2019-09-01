@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		A48A355D21D01849002C70A1 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48A355C21D01849002C70A1 /* Card.swift */; };
 		A49311511FEFC46600E77EAD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49311501FEFC46600E77EAD /* AppDelegate.swift */; };
-		A49311531FEFC46600E77EAD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49311521FEFC46600E77EAD /* ViewController.swift */; };
+		A49311531FEFC46600E77EAD /* ConcentrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49311521FEFC46600E77EAD /* ConcentrationViewController.swift */; };
 		A49311561FEFC46600E77EAD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A49311541FEFC46600E77EAD /* Main.storyboard */; };
 		A49311581FEFC46600E77EAD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A49311571FEFC46600E77EAD /* Assets.xcassets */; };
 		A493115B1FEFC46600E77EAD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A49311591FEFC46600E77EAD /* LaunchScreen.storyboard */; };
 		A49311661FEFC46600E77EAD /* ConcentrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49311651FEFC46600E77EAD /* ConcentrationTests.swift */; };
 		A49311711FEFC46600E77EAD /* ConcentrationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49311701FEFC46600E77EAD /* ConcentrationUITests.swift */; };
+		A4957B122304D3B70060D1E2 /* ConcentrationThemeChooserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4957B112304D3B70060D1E2 /* ConcentrationThemeChooserViewController.swift */; };
 		A4E8F96E1FF93DAE00502E73 /* Concentration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E8F96D1FF93DAE00502E73 /* Concentration.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,10 +37,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A418F650231C34FD0031F873 /* Set.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Set.xcodeproj; path = "../Animated Set/Set.xcodeproj"; sourceTree = "<group>"; };
 		A48A355C21D01849002C70A1 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		A493114D1FEFC46600E77EAD /* Concentration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A49311501FEFC46600E77EAD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A49311521FEFC46600E77EAD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A49311521FEFC46600E77EAD /* ConcentrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationViewController.swift; sourceTree = "<group>"; };
 		A49311551FEFC46600E77EAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A49311571FEFC46600E77EAD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A493115A1FEFC46600E77EAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 		A493116C1FEFC46600E77EAD /* ConcentrationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConcentrationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A49311701FEFC46600E77EAD /* ConcentrationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationUITests.swift; sourceTree = "<group>"; };
 		A49311721FEFC46600E77EAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4957B112304D3B70060D1E2 /* ConcentrationThemeChooserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrationThemeChooserViewController.swift; sourceTree = "<group>"; };
 		A4E8F96D1FF93DAE00502E73 /* Concentration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concentration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +84,7 @@
 		A49311441FEFC46600E77EAD = {
 			isa = PBXGroup;
 			children = (
+				A418F650231C34FD0031F873 /* Set.xcodeproj */,
 				A493114F1FEFC46600E77EAD /* Concentration */,
 				A49311641FEFC46600E77EAD /* ConcentrationTests */,
 				A493116F1FEFC46600E77EAD /* ConcentrationUITests */,
@@ -101,7 +105,8 @@
 		A493114F1FEFC46600E77EAD /* Concentration */ = {
 			isa = PBXGroup;
 			children = (
-				A49311521FEFC46600E77EAD /* ViewController.swift */,
+				A49311521FEFC46600E77EAD /* ConcentrationViewController.swift */,
+				A4957B112304D3B70060D1E2 /* ConcentrationThemeChooserViewController.swift */,
 				A49311541FEFC46600E77EAD /* Main.storyboard */,
 				A4E8F96D1FF93DAE00502E73 /* Concentration.swift */,
 				A48A355C21D01849002C70A1 /* Card.swift */,
@@ -209,6 +214,11 @@
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					A49311601FEFC46600E77EAD = {
 						CreatedOnToolsVersion = 9.2;
@@ -231,6 +241,7 @@
 			knownRegions = (
 				en,
 				Base,
+				global,
 			);
 			mainGroup = A49311441FEFC46600E77EAD;
 			productRefGroup = A493114E1FEFC46600E77EAD /* Products */;
@@ -276,7 +287,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A49311531FEFC46600E77EAD /* ViewController.swift in Sources */,
+				A4957B122304D3B70060D1E2 /* ConcentrationThemeChooserViewController.swift in Sources */,
+				A49311531FEFC46600E77EAD /* ConcentrationViewController.swift in Sources */,
 				A49311511FEFC46600E77EAD /* AppDelegate.swift in Sources */,
 				A4E8F96E1FF93DAE00502E73 /* Concentration.swift in Sources */,
 				A48A355D21D01849002C70A1 /* Card.swift in Sources */,
@@ -448,6 +460,7 @@
 		A49311761FEFC46600E77EAD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29GS565N7V;
@@ -463,6 +476,7 @@
 		A49311771FEFC46600E77EAD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 29GS565N7V;

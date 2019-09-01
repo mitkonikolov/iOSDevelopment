@@ -399,26 +399,10 @@
             </objects>
             <point key="canvasLocation" x="-1655" y="673"/>
         </scene>
-        <!--Item 2-->
-        <scene sceneID="Qew-Ab-01g">
-            <objects>
-                <viewController id="jp8-6w-Oht" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="JCT-iQ-RMa">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="m9J-sd-Q8F"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="RHT-dV-qNK"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="h38-H7-cPE" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1517" y="2358"/>
-        </scene>
         <!--Item 1-->
         <scene sceneID="nCf-DH-6yu">
             <objects>
-                <viewController id="9oh-ej-04J" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Set.storyboard" id="9oh-ej-04J" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="86j-aO-TZE">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -443,7 +427,6 @@
                     <connections>
                         <segue destination="Ug1-ve-9Tb" kind="relationship" relationship="viewControllers" id="ObI-24-Zx0"/>
                         <segue destination="9oh-ej-04J" kind="relationship" relationship="viewControllers" id="pQt-Iy-8IY"/>
-                        <segue destination="jp8-6w-Oht" kind="relationship" relationship="viewControllers" id="CNf-I6-2Cu"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIO-f7-79e" userLabel="First Responder" sceneMemberID="firstResponder"/>
