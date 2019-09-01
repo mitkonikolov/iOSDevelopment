@@ -4,6 +4,7 @@ DerivedData/
 
 # XCode Project Directory
 *.xcodeproj/*
+*.xcworkspace
 
 */xcuserdata/*
 

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ConcentrationViewController.swift
 //  Concentration
 //
 //  Created by Mitko Nikolov on 12/24/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ConcentrationViewController: UIViewController {
     private lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     private let emojiThemes = [["🎃", "😈", "💀", "🧟‍♀️", "🧛‍♂️", "🍭", "🍬", "👻", "☠️", "👽"],
                        ["😀", "😁", "😝", "😎", "😳", "😬", "🤠", "🤣", "😋", "🤓", "🧐","😘"],
@@ -40,10 +40,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction private func newGame(_ sender: UIButton) {
-        emojiChoices = emojiThemes[emojiThemes.count.arc4random]
         let theme = colorSchemes[colorSchemes.count.arc4random]
         // reset the association between cards and emojis
-        emoji = [Card:String]()
+        emoji = [Card:Int]()
         // set all cards as face-down and unmatched
         game.restart()
         self.view.backgroundColor = theme.backgroundColor
@@ -59,7 +58,12 @@ class ViewController: UIViewController {
             let card = game.cards[index]
             if card.isFaceUp {
                 button.backgroundColor = #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)
-                button.setTitle(emoji(for: card), for: UIControl.State.normal)
+              let emojiIndex = emoji(for: card)
+              var emoji = "?"
+              if emojiChoices.indices.contains(emojiIndex) {
+                emoji = emojiChoices[emojiIndex]
+              }
+              button.setTitle(emoji, for: UIControl.State.normal)
             } else {
                 button.backgroundColor = card.isMatched ? self.view.backgroundColor : cardColor
                 button.setTitle("", for: UIControl.State.normal)
@@ -69,18 +73,32 @@ class ViewController: UIViewController {
         }
     }
     
-    private lazy var emojiChoices = emojiThemes[emojiThemes.count.arc4random]
-    
+  public var emojiChoices: [String] = [] {
+    willSet(newValue) {
+      availableEmojiIndices = Array(newValue.indices)
+      emoji = [Card:Int]()
+    }
+    didSet {
+      if cardButtons != nil {
+        updateViewFromModel()
+      }
+    }
+  }
+  
+  private var availableEmojiIndices: [Int] = []
+  
     // association of button IDs and emojis
-    private var emoji = [Card:String]()
+    private var emoji = [Card:Int]()
     
-    private func emoji(for card:Card) -> String {
+    private func emoji(for card:Card) -> Int {
         // there is no emoji associated with this card and there are emojis still available
-        if emoji[card] == nil, emojiChoices.count>0 {
-            emoji[card] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        if emoji[card] == nil, availableEmojiIndices.count>0 {
+          let randomIndex = availableEmojiIndices.count.arc4random
+          emoji[card] = availableEmojiIndices[randomIndex]
+          availableEmojiIndices.remove(at: randomIndex)
         }
         
-        return emoji[card] ?? "?"
+        return emoji[card] ?? -1
     }
 }
 

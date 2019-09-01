@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A418F657231C49E80031F873 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4290F2C21F675C2003A9275 /* Main.storyboard */; };
 		A42141152247E64A006D8840 /* CardValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42141142247E64A006D8840 /* CardValueView.swift */; };
 		A4214117224EC606006D8840 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4214116224EC606006D8840 /* Grid.swift */; };
 		A421411B22540A6E006D8840 /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A421411A22540A6E006D8840 /* ContainerView.swift */; };
 		A426D27C2294B8FD00BB54AF /* MatchedCardsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A426D27B2294B8FD00BB54AF /* MatchedCardsSectionView.swift */; };
 		A4290F2921F675C2003A9275 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F2821F675C2003A9275 /* AppDelegate.swift */; };
 		A4290F2B21F675C2003A9275 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F2A21F675C2003A9275 /* ViewController.swift */; };
-		A4290F2E21F675C2003A9275 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4290F2C21F675C2003A9275 /* Main.storyboard */; };
 		A4290F3021F675C4003A9275 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4290F2F21F675C4003A9275 /* Assets.xcassets */; };
 		A4290F3321F675C4003A9275 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4290F3121F675C4003A9275 /* LaunchScreen.storyboard */; };
 		A4290F3C21F6771E003A9275 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4290F3B21F6771E003A9275 /* Card.swift */; };
@@ -178,9 +178,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A418F657231C49E80031F873 /* Main.storyboard in Resources */,
 				A4290F3321F675C4003A9275 /* LaunchScreen.storyboard in Resources */,
 				A4290F3021F675C4003A9275 /* Assets.xcassets in Resources */,
-				A4290F2E21F675C2003A9275 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
