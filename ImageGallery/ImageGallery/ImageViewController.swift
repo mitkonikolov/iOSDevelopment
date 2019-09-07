@@ -10,6 +10,25 @@ import UIKit
 
 class ImageViewController: UIViewController, UIScrollViewDelegate {
   
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    if imageURL == nil {
+      imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Stanford_Oval_May_2011_panorama.jpg")
+    }
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    // the imageView should be set up
+    if imageView.image == nil {
+      fetchImage()
+    }
+  }
+  
+  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    return imageView
+  }
+  
   private var imageURL: URL? {
     didSet {
       // reset the image because it should be updated
@@ -19,14 +38,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
       if view.window != nil {
         fetchImage()
       }
-    }
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    // the imageView should be set up
-    if imageView.image == nil {
-      fetchImage()
     }
   }
   
@@ -51,10 +62,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     }
   }
   
-  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-    return imageView
-  }
-  
   var imageView = UIImageView()
   
   private func fetchImage() {
@@ -68,13 +75,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
       if let imageData = urlContents {
         image = UIImage(data: imageData)
       }
-    }
-  }
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    if imageURL == nil {
-      imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Stanford_Oval_May_2011_panorama.jpg")
     }
   }
   
