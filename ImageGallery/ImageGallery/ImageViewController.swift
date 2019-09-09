@@ -12,9 +12,9 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    if imageURL == nil {
-      imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Stanford_Oval_May_2011_panorama.jpg")
-    }
+//    if imageURL == nil {
+//      imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Stanford_Oval_May_2011_panorama.jpg")
+//    }
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -29,7 +29,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     return imageView
   }
   
-  private var imageURL: URL? {
+  var imageURL: URL? {
     didSet {
       // reset the image because it should be updated
       image = nil
@@ -49,7 +49,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     set {
       imageView.image = newValue
       imageView.sizeToFit()
-      scrollView.contentSize = imageView.frame.size
+      scrollView?.contentSize = imageView.frame.size
     }
   }
   
