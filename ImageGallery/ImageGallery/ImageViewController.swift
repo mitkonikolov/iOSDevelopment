@@ -67,13 +67,18 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
   private func fetchImage() {
     // check if imageURL is nil
     if let url = imageURL {
-      // urlContents is a bag of bits
-      // try? set the result to nil if Data throws an exception and to a bag of
-      // bits otherwise
-      let urlContents = try? Data(contentsOf: url)
-      // urlContents != nil
-      if let imageData = urlContents {
-        image = UIImage(data: imageData)
+      DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        // urlContents is a bag of bits
+        // try? set the result to nil if Data throws an exception and to a bag of
+        // bits otherwise
+        let urlContents = try? Data(contentsOf: url)
+        // urlContents != nil
+        // we need to check that the fetched url and the self?.imageURL is one and the same because we are running multithreaded code and by the time, this closure gets executed, it is possible that the imageURL might have been changed and a new image is being fetched or has been fetched so we don't want to update, unless we got the image that we are still looking for
+        DispatchQueue.main.async {
+          if let imageData = urlContents, url == self?.imageURL {
+            self?.image = UIImage(data: imageData)
+          }
+        }
       }
     }
   }
