@@ -50,8 +50,11 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
       imageView.image = newValue
       imageView.sizeToFit()
       scrollView?.contentSize = imageView.frame.size
+      spinner?.stopAnimating()
     }
   }
+  
+  @IBOutlet weak var spinner: UIActivityIndicatorView!
   
   @IBOutlet weak var scrollView: UIScrollView! {
     didSet {
@@ -67,6 +70,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
   private func fetchImage() {
     // check if imageURL is nil
     if let url = imageURL {
+      spinner.startAnimating()
       DispatchQueue.global(qos: .userInitiated).async { [weak self] in
         // urlContents is a bag of bits
         // try? set the result to nil if Data throws an exception and to a bag of
