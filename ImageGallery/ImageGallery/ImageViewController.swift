@@ -10,13 +10,6 @@ import UIKit
 
 class ImageViewController: UIViewController, UIScrollViewDelegate {
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-//    if imageURL == nil {
-//      imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Stanford_Oval_May_2011_panorama.jpg")
-//    }
-  }
-  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     // the imageView should be set up
