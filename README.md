@@ -1,2 +1,2 @@
 # iOSDevelopment
-Implementations of Stanford's CS193P course.
+Implementations of assignments and demos from Stanford's CS193P course.
