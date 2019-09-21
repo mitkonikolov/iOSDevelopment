@@ -2,11 +2,11 @@
 build/
 DerivedData/
 
-# XCode Project Directory
-*.xcodeproj/*
-*.xcworkspace
+# XCode Project Directory - not having xcodeproj might make a project very difficult/impossible to build and xcworkspace can be useful; adding xcuserdata although it will likely not be needed
+#*.xcodeproj/*
+#*.xcworkspace
 
-*/xcuserdata/*
+#*/xcuserdata/*
 
 # Ignore information about the directory
 *.DS_Store*
