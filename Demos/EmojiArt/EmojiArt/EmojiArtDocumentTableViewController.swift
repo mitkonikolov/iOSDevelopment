@@ -12,6 +12,13 @@ class EmojiArtDocumentTableViewController: UITableViewController {
 
   var emojiArtDocuments = ["One", "Two", "Three"]
   
+  override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    if splitViewController?.preferredDisplayMode != .primaryOverlay {
+      splitViewController?.preferredDisplayMode = .primaryOverlay
+    }
+  }
+  
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
