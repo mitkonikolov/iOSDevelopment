@@ -86,7 +86,7 @@ class EmojiArtViewController: UIViewController, UIDropInteractionDelegate, UIScr
   
   // the initial things to be dragged
   func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-    // this allows me to tell the droppees (the collections accepting a drop) that this is a local drag and its context is the collection view. Thus I can know where the drag started from in case I would want to adjust my behavior based on the source of the drag.
+    // this allows me to tell the dropees (the collections accepting a drop) that this is a local drag and its context is the collection view. Thus I can know where the drag started from in case I would want to adjust my behavior based on the source of the drag.
     session.localContext = collectionView
     return dragItems(at: indexPath)
   }
@@ -134,6 +134,26 @@ class EmojiArtViewController: UIViewController, UIDropInteractionDelegate, UIScr
           })
           // while moving the data happened above, this drop operation animates removing of the picture under your finger, removing the + sign, etc. - all the other things that are normally animated with a drag and drop
           coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+        }
+      }
+      // if sourceIndexPath could not be obtained, the the source was outside of the app
+      else {
+        // create a special object that holds a place in the collection view for the object while the object is being fetched
+        let placeholderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell"))
+        // load the object to insert into the collection
+        item.dragItem.itemProvider.loadObject(ofClass: NSAttributedString.self) { (provider, error) in
+          DispatchQueue.main.async {
+            if let attributedString = provider as? NSAttributedString {
+              // commitInsertion substitutes the placeholder with a new cell containing the data; it also updates the model for me. If the placeholdercell does not exist anymore commitInsertion does not change the model
+              placeholderContext.commitInsertion { (insertionIndexPath) in
+                self.emojis.insert(attributedString.string, at: insertionIndexPath.item)
+              }
+            }
+            // the received object was not successfully converted into an NSAttributedString
+            else {
+              placeholderContext.deletePlaceholder()
+            }
+          }
         }
       }
     }
