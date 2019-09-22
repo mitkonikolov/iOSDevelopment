@@ -75,18 +75,24 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nn3-UH-RZ9">
                                 <rect key="frame" x="0.0" y="0.0" width="703.5" height="768"/>
                                 <subviews>
-                                    <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="6nf-qx-0M9">
+                                    <scrollView verifyAmbiguity="off" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="6nf-qx-0M9">
                                         <rect key="frame" x="232" y="289" width="240" height="128"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="250" constant="128" id="RcG-zh-xqG"/>
+                                            <constraint firstAttribute="width" priority="250" constant="240" id="h65-W4-25t"/>
+                                        </constraints>
                                         <viewLayoutGuide key="contentLayoutGuide" id="rKX-dN-9H4"/>
                                         <viewLayoutGuide key="frameLayoutGuide" id="8fq-Zz-XXe"/>
                                     </scrollView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="leading" secondItem="Nn3-UH-RZ9" secondAttribute="leading" id="9fK-ZH-0Yh"/>
-                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="top" secondItem="Nn3-UH-RZ9" secondAttribute="top" id="P9L-fd-BMq"/>
-                                    <constraint firstAttribute="trailing" secondItem="6nf-qx-0M9" secondAttribute="trailing" id="b5v-u0-c9W"/>
-                                    <constraint firstAttribute="bottom" secondItem="6nf-qx-0M9" secondAttribute="bottom" id="df0-Ne-Fr6"/>
+                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Nn3-UH-RZ9" secondAttribute="leading" id="9fK-ZH-0Yh"/>
+                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="centerY" secondItem="Nn3-UH-RZ9" secondAttribute="centerY" id="Bew-Kx-OXv"/>
+                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Nn3-UH-RZ9" secondAttribute="top" id="P9L-fd-BMq"/>
+                                    <constraint firstItem="6nf-qx-0M9" firstAttribute="centerX" secondItem="Nn3-UH-RZ9" secondAttribute="centerX" id="UIc-Ef-rXs"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6nf-qx-0M9" secondAttribute="trailing" id="b5v-u0-c9W"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="6nf-qx-0M9" secondAttribute="bottom" id="df0-Ne-Fr6"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -102,6 +108,8 @@
                     <connections>
                         <outlet property="dropZone" destination="Nn3-UH-RZ9" id="hmE-CJ-pRq"/>
                         <outlet property="scrollView" destination="6nf-qx-0M9" id="xVk-Ci-Mez"/>
+                        <outlet property="scrollViewHeight" destination="RcG-zh-xqG" id="GYC-Wn-pdx"/>
+                        <outlet property="scrollViewWidth" destination="h65-W4-25t" id="YMj-6k-6Ow"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
