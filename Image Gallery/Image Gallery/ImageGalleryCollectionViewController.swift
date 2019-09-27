@@ -10,7 +10,7 @@ import UIKit
 
 class ImageGalleryViewController: UIViewController, UICollectionViewDataSource {
   
-  let picture
+  var image = UIImage(named: "1")
   
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return 1
@@ -18,9 +18,10 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource {
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageGalleryCell", for: indexPath)
-//    if let imageGalleryCell = cell as? ImageGalleryCollectionViewCell {
-//      if let data
-//    }
+    if let imageGalleryCell = cell as? ImageGalleryCollectionViewCell {
+      imageGalleryCell.imageView.image = image
+    }
+    
     return cell
   }
   
