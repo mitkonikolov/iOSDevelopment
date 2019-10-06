@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A423CAD7233E90E70009646E /* ImageGalleryCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A423CAD6233E90E70009646E /* ImageGalleryCollectionViewController.swift */; };
 		A423CAD9233E99B60009646E /* ImageGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A423CAD8233E99B60009646E /* ImageGalleryCollectionViewCell.swift */; };
-		A423CADB233E9F530009646E /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A423CADA233E9F530009646E /* 1.jpg */; };
 		A4E65E4F233E8D8B001E2512 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E65E4E233E8D8B001E2512 /* AppDelegate.swift */; };
 		A4E65E51233E8D8B001E2512 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E65E50233E8D8B001E2512 /* SceneDelegate.swift */; };
 		A4E65E56233E8D8B001E2512 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4E65E54233E8D8B001E2512 /* Main.storyboard */; };
@@ -20,7 +19,6 @@
 /* Begin PBXFileReference section */
 		A423CAD6233E90E70009646E /* ImageGalleryCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryCollectionViewController.swift; sourceTree = "<group>"; };
 		A423CAD8233E99B60009646E /* ImageGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
-		A423CADA233E9F530009646E /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
 		A4E65E4B233E8D8B001E2512 /* Image Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Image Gallery.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4E65E4E233E8D8B001E2512 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A4E65E50233E8D8B001E2512 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,7 +60,6 @@
 			children = (
 				A423CAD6233E90E70009646E /* ImageGalleryCollectionViewController.swift */,
 				A4E65E54233E8D8B001E2512 /* Main.storyboard */,
-				A423CADA233E9F530009646E /* 1.jpg */,
 				A423CAD8233E99B60009646E /* ImageGalleryCollectionViewCell.swift */,
 				A4E65E62233E8DCB001E2512 /* Supporting Files */,
 				A4E65E5C233E8D8E001E2512 /* Info.plist */,
@@ -140,7 +137,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4E65E5B233E8D8E001E2512 /* LaunchScreen.storyboard in Resources */,
-				A423CADB233E9F530009646E /* 1.jpg in Resources */,
 				A4E65E58233E8D8E001E2512 /* Assets.xcassets in Resources */,
 				A4E65E56233E8D8B001E2512 /* Main.storyboard in Resources */,
 			);

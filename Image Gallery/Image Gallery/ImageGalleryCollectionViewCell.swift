@@ -10,11 +10,15 @@ import UIKit
 
 class ImageGalleryCollectionViewCell: UICollectionViewCell {
   
-  @IBOutlet weak var imageView: UIImageView! {
-    didSet {
-      imageView.sizeToFit()
+  
+  @IBOutlet weak var imageView: UIImageView!
+  
+  var image: UIImage? {
+    get {
+      return imageView.image
+    }
+    set {
+      imageView.image = newValue
     }
   }
-  
-  
 }
