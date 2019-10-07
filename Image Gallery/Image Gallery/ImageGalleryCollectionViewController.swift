@@ -8,10 +8,11 @@
 
 import UIKit
 
-class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
   
   var image = UIImage(named: "1")
   
+  // Collection View Data Source Delegate: Begin ---
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return 1
   }
@@ -25,7 +26,10 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
     
     return cell
   }
+  /// --- End
   
+  
+  // Flow Layout Delegate Methods: Begin ---
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let size = image?.size
     let width = CGFloat(120)
@@ -35,15 +39,23 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
     }
     return CGSize(width: width, height: height)
   }
+  // --- End
   
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-    return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+  
+  // Collection View Drop Delegate: Begin ---
+  func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    for item in coordinator.items {
+      
+    }
   }
+  // --- End
+  
   
   @IBOutlet weak var ImageGalleryCollectionView: UICollectionView! {
     didSet {
       ImageGalleryCollectionView.dataSource = self
       ImageGalleryCollectionView.delegate = self
+      ImageGalleryCollectionView.dropDelegate = self
     }
   }
 }
