@@ -12,7 +12,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   var image = UIImage(named: "1")
   
-  // Collection View Data Source Delegate: Begin ---
+  // MARK: Collection View Data Source Delegate -
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return 1
   }
@@ -26,10 +26,9 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
     
     return cell
   }
-  /// --- End
+    
   
-  
-  // Flow Layout Delegate Methods: Begin ---
+  // MARK: Flow Layout Delegate Methods: Begin ---
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let size = image?.size
     let width = CGFloat(120)
@@ -39,16 +38,26 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
     }
     return CGSize(width: width, height: height)
   }
-  // --- End
   
   
-  // Collection View Drop Delegate: Begin ---
+  // MARK: Collection View Drop Delegate -
+  
+  func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+    return session.canLoadObjects(ofClass: NSURL.self) &&
+      session.canLoadObjects(ofClass: UIImage.self)
+  }
+  
+  func collectionView(_ collectionView: UICollectionView,
+                      dropSessionDidUpdate session: UIDropSession,
+                      withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    return UICollectionViewDropProposal(operation: .copy)
+  }
+  
   func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
     for item in coordinator.items {
       
     }
   }
-  // --- End
   
   
   @IBOutlet weak var ImageGalleryCollectionView: UICollectionView! {
