@@ -14,6 +14,7 @@
 		A4E65E56233E8D8B001E2512 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4E65E54233E8D8B001E2512 /* Main.storyboard */; };
 		A4E65E58233E8D8E001E2512 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4E65E57233E8D8E001E2512 /* Assets.xcassets */; };
 		A4E65E5B233E8D8E001E2512 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4E65E59233E8D8E001E2512 /* LaunchScreen.storyboard */; };
+		A4F57230236623A90033A484 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F5722F236623A90033A484 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		A4E65E57233E8D8E001E2512 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A4E65E5A233E8D8E001E2512 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A4E65E5C233E8D8E001E2512 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4F5722F236623A90033A484 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utilities.swift; path = "../../../Demos/EmojiArt/EmojiArt/Supporting Files/Utilities.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				A4E65E4E233E8D8B001E2512 /* AppDelegate.swift */,
+				A4F5722F236623A90033A484 /* Utilities.swift */,
 				A4E65E50233E8D8B001E2512 /* SceneDelegate.swift */,
 				A4E65E57233E8D8E001E2512 /* Assets.xcassets */,
 				A4E65E59233E8D8E001E2512 /* LaunchScreen.storyboard */,
@@ -152,6 +155,7 @@
 				A423CAD7233E90E70009646E /* ImageGalleryCollectionViewController.swift in Sources */,
 				A423CAD9233E99B60009646E /* ImageGalleryCollectionViewCell.swift in Sources */,
 				A4E65E4F233E8D8B001E2512 /* AppDelegate.swift in Sources */,
+				A4F57230236623A90033A484 /* Utilities.swift in Sources */,
 				A4E65E51233E8D8B001E2512 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

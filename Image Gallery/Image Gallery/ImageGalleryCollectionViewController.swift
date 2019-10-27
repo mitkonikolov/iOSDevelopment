@@ -12,7 +12,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   var image = UIImage(named: "1")
   
-  // MARK: Collection View Data Source Delegate -
+  // MARK: Collection View Data Source Delegate
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return 1
   }
@@ -28,7 +28,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   }
     
   
-  // MARK: Flow Layout Delegate Methods: Begin ---
+  // MARK: Flow Layout Delegate Method
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     let size = image?.size
     let width = CGFloat(120)
@@ -55,7 +55,10 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
     for item in coordinator.items {
-      
+      item.dragItem.itemProvider.loadObject(ofClass: NSURL.self, completionHandler:
+        { (url, error) in
+          print(url!)
+      })
     }
   }
   
