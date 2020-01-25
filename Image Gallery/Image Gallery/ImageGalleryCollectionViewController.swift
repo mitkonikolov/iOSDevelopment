@@ -19,6 +19,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    print("a cell is requested for \(indexPath)")
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageGalleryCell", for: indexPath)
     if let imageGalleryCell = cell as? ImageGalleryCollectionViewCell {
       imageGalleryCell.image = image
@@ -55,8 +56,18 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
     for item in coordinator.items {
       item.dragItem.itemProvider.loadObject(ofClass: NSURL.self, completionHandler:
         { (url, error) in
-          print("ImageGalleryViewController: collectionView performDropWith got \(url!)")
-      })
+          if let normalizedURL = (url as? URL)?.imageURL {
+            let task = URLSession.shared.dataTask(with: normalizedURL) { [weak self] (receivedData, response, error) in
+              if receivedData != nil {
+                self?.image = UIImage(data: receivedData!)
+                DispatchQueue.main.async {
+                  self?.ImageGalleryCollectionView.reloadData()
+                }
+              }
+            }
+            task.resume()
+          }
+        })
     }
   }
   
