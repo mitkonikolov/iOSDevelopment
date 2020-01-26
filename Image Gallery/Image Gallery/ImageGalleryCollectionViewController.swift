@@ -10,19 +10,20 @@ import UIKit
 
 class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
   
-  var image = UIImage(named: "1")
+//  var images = UIImage(named: "1")
+  var images = [UIImage(named: "1")]
   let cellWidth = CGFloat(200)
   
   // MARK: Collection View Data Source Delegate
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 1
+    return images.count
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    print("a cell is requested for \(indexPath)")
+    print("a cell is requested for \(indexPath.item)")
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageGalleryCell", for: indexPath)
-    if let imageGalleryCell = cell as? ImageGalleryCollectionViewCell {
-      imageGalleryCell.image = image
+    if let imageGalleryCell = cell as? ImageGalleryCollectionViewCell, indexPath.item < images.endIndex {
+      imageGalleryCell.image = images[indexPath.item]
     }
     
     return cell
@@ -31,7 +32,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   // MARK: Flow Layout Delegate Method
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    let size = image?.size
+    let size = images[indexPath.item]?.size
     var height = CGFloat(420)
     if let h = size?.height, let w = size?.width {
       height = cellWidth * (h/w)
@@ -59,7 +60,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
           if let normalizedURL = (url as? URL)?.imageURL {
             let task = URLSession.shared.dataTask(with: normalizedURL) { [weak self] (receivedData, response, error) in
               if receivedData != nil {
-                self?.image = UIImage(data: receivedData!)
+                self?.images.append(UIImage(data: receivedData!))
                 DispatchQueue.main.async {
                   self?.ImageGalleryCollectionView.reloadData()
                 }
