@@ -55,14 +55,24 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
     for item in coordinator.items {
+      let destinationIndexPath = item.sourceIndexPath ?? IndexPath(item: images.count, section: 0)
+      let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell")
+      let dropPlaceholderContext = coordinator.drop(item.dragItem, to: placeholder)
+      
       item.dragItem.itemProvider.loadObject(ofClass: NSURL.self, completionHandler:
         { (url, error) in
           if let normalizedURL = (url as? URL)?.imageURL {
             let task = URLSession.shared.dataTask(with: normalizedURL) { [weak self] (receivedData, response, error) in
               if receivedData != nil {
-                self?.images.append(UIImage(data: receivedData!))
                 DispatchQueue.main.async {
-                  self?.ImageGalleryCollectionView.reloadData()
+                  dropPlaceholderContext.commitInsertion { _ in
+                    self?.images.append(UIImage(data: receivedData!))
+                  }
+                }
+              }
+              else {
+                DispatchQueue.main.async {
+                  dropPlaceholderContext.deletePlaceholder()
                 }
               }
             }
@@ -71,6 +81,8 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
         })
     }
   }
+  
+  
   
   
   @IBOutlet weak var ImageGalleryCollectionView: UICollectionView! {
