@@ -8,10 +8,10 @@
 
 import UIKit
 
-class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
+class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate, UICollectionViewDragDelegate {
   
-//  var images = UIImage(named: "1")
   var images = [UIImage(named: "1")]
+  let sections = 1
   let cellWidth = CGFloat(200)
   
   // MARK: Collection View Data Source Delegate
@@ -41,8 +41,13 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   }
   
   
-  // MARK: Collection View Drop Delegate -
+  // MARK: Collection View Drop Delegate
   func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+    // local drop
+    if session.localDragSession != nil {
+      return session.canLoadObjects(ofClass: UIImage.self)
+    }
+    // the drag started in a different app
     return session.canLoadObjects(ofClass: NSURL.self) &&
       session.canLoadObjects(ofClass: UIImage.self)
   }
@@ -55,33 +60,55 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
   
   func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
     for item in coordinator.items {
-      let destinationIndexPath = item.sourceIndexPath ?? IndexPath(item: images.count, section: 0)
-      let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell")
-      let dropPlaceholderContext = coordinator.drop(item.dragItem, to: placeholder)
-      
-      item.dragItem.itemProvider.loadObject(ofClass: NSURL.self, completionHandler:
-        { (url, error) in
-          if let normalizedURL = (url as? URL)?.imageURL {
-            let task = URLSession.shared.dataTask(with: normalizedURL) { [weak self] (receivedData, response, error) in
-              if receivedData != nil {
-                DispatchQueue.main.async {
-                  dropPlaceholderContext.commitInsertion { _ in
-                    self?.images.append(UIImage(data: receivedData!))
+      if (item.sourceIndexPath != nil) {
+        collectionView.performBatchUpdates({
+          let image = self.images[item.sourceIndexPath!.item]
+          self.images.remove(at: item.sourceIndexPath!.item)
+          let destination = (coordinator.destinationIndexPath != nil) ? coordinator.destinationIndexPath!.item : images.endIndex
+          self.images.insert(image, at: destination)
+          
+        }, completion: {res in collectionView.reloadData()})
+      }
+      else {
+        let destinationIndexPath = IndexPath(item: images.endIndex, section: sections-1)
+        let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell")
+        let dropPlaceholderContext = coordinator.drop(item.dragItem, to: placeholder)
+        
+        item.dragItem.itemProvider.loadObject(ofClass: NSURL.self, completionHandler:
+          { (url, error) in
+            if let normalizedURL = (url as? URL)?.imageURL {
+              let task = URLSession.shared.dataTask(with: normalizedURL) { [weak self] (receivedData, response, error) in
+                if error == nil {
+                  DispatchQueue.main.async {
+                    dropPlaceholderContext.commitInsertion { _ in
+                      self?.images.append(UIImage(data: receivedData!))
+                    }
+                  }
+                }
+                else {
+                  print("there was an error downloading the image \(error!)")
+                  DispatchQueue.main.async {
+                    dropPlaceholderContext.deletePlaceholder()
                   }
                 }
               }
-              else {
-                DispatchQueue.main.async {
-                  dropPlaceholderContext.deletePlaceholder()
-                }
-              }
+              task.resume()
             }
-            task.resume()
-          }
-        })
+          })
+      }
     }
   }
   
+  
+  // MARK: UICollectionViewDragDelegate
+  func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+    if self.images[indexPath.item] != nil {
+      let provider = NSItemProvider(object: self.images[indexPath.item]!)
+      let dragItem = UIDragItem(itemProvider: provider)
+      return [dragItem]
+    }
+    return []
+  }
   
   
   
@@ -90,6 +117,7 @@ class ImageGalleryViewController: UIViewController, UICollectionViewDataSource, 
       ImageGalleryCollectionView.dataSource = self
       ImageGalleryCollectionView.delegate = self
       ImageGalleryCollectionView.dropDelegate = self
+      ImageGalleryCollectionView.dragDelegate = self
     }
   }
 }
